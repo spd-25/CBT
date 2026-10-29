@@ -1,0 +1,434 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>8-Week iCBT Roadmap | Social Anxiety Program</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        /* Custom scrollbar for smooth navigation */
+        .no-scrollbar::-webkit-scrollbar { display: none; }
+        .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+    </style>
+</head>
+<body class="bg-slate-100 text-slate-800 font-sans antialiased min-h-screen flex flex-col">
+
+    <!-- Top Navigation -->
+    <header class="bg-white border-b border-slate-200 sticky top-0 z-50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 py-3 flex items-center justify-between">
+            <div class="flex items-center space-x-3">
+                <a href="index.html" class="text-slate-400 hover:text-slate-700 text-sm font-medium flex items-center gap-1">&larr; Home</a>
+                <span class="text-slate-300">|</span>
+                <span class="font-bold text-slate-900">8-Week iCBT Roadmap</span>
+            </div>
+            <div class="flex items-center gap-3">
+                <button onclick="resetProgress()" class="text-xs text-slate-400 hover:text-rose-600 transition-colors underline">Reset Progress</button>
+                <div class="text-xs bg-indigo-50 text-indigo-700 font-semibold px-3 py-1 rounded-full flex items-center gap-1.5 border border-indigo-100">
+                    <span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
+                    Progress Saved Locally
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Notification Toast -->
+    <div id="toast" class="fixed bottom-5 right-5 z-50 transform translate-y-20 opacity-0 transition-all duration-300 pointer-events-none bg-slate-900 text-white text-xs px-4 py-3 rounded-xl shadow-xl flex items-center gap-2">
+        <span id="toast-message">✨ Progress saved!</span>
+    </div>
+
+    <!-- Main Container -->
+    <div class="max-w-7xl mx-auto w-full px-4 sm:px-6 py-8 flex-grow grid grid-cols-1 lg:grid-cols-12 gap-8">
+        
+        <!-- Sidebar Navigation Accordion -->
+        <aside class="lg:col-span-4 xl:col-span-3 bg-white rounded-2xl border border-slate-200 p-4 shadow-sm h-fit">
+            <div class="flex items-center justify-between mb-4 px-2">
+                <div>
+                    <h2 class="text-xs font-bold text-slate-400 uppercase tracking-wider">Program Roadmap</h2>
+                    <p class="text-[11px] text-slate-500">Collapsible Paced View</p>
+                </div>
+                <span id="unlocked-count" class="text-xs font-semibold text-indigo-600 bg-indigo-50 border border-indigo-100 px-2.5 py-1 rounded-full">1/8 Unlocked</span>
+            </div>
+            <div id="accordion-nav" class="space-y-2">
+                <!-- Dynamically injected via JS -->
+            </div>
+        </aside>
+
+        <!-- Main Content Area -->
+        <main class="lg:col-span-8 xl:col-span-9 bg-white rounded-2xl border border-slate-200 p-6 sm:p-8 shadow-sm flex flex-col justify-between">
+            <div>
+                <!-- Session Title & Individual Week Progress Bar -->
+                <div class="border-b border-slate-200 pb-6 mb-6">
+                    <div class="flex items-center justify-between flex-wrap gap-2 mb-2">
+                        <span id="session-badge" class="text-xs font-bold bg-indigo-50 text-indigo-700 px-3 py-1 rounded-full uppercase tracking-wider">Week 1 of 8</span>
+                        <span id="completion-status-text" class="text-xs font-semibold text-amber-600 bg-amber-50 px-2.5 py-1 rounded-md border border-amber-200">In Progress</span>
+                    </div>
+                    <h1 id="session-title" class="text-2xl sm:text-3xl font-extrabold text-slate-900 tracking-tight">Understanding Social Anxiety & Triggers</h1>
+                    <p id="session-subtitle" class="text-slate-500 text-sm mt-1 mb-4">Establish your baseline distress and map out your personal triggers.</p>
+                    
+                    <!-- Individual Week Progress Bar -->
+                    <div class="bg-slate-50 p-3.5 rounded-xl border border-slate-100">
+                        <div class="flex justify-between items-center text-xs font-semibold text-slate-600 mb-1.5">
+                            <span>Week <span id="progress-week-num">1</span> Completion Progress</span>
+                            <span id="progress-percent" class="text-indigo-600 font-bold">25%</span>
+                        </div>
+                        <div class="w-full bg-slate-200 rounded-full h-2.5 overflow-hidden">
+                            <div id="progress-bar-fill" class="bg-indigo-600 h-2.5 rounded-full transition-all duration-300" style="width: 25%"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Step Navigation Tabs -->
+                <div class="flex border-b border-slate-200 mb-8 overflow-x-auto no-scrollbar gap-1">
+                    <button onclick="switchStep(1)" id="step-btn-1" class="step-tab px-4 py-3 font-semibold text-sm border-b-2 border-indigo-600 text-indigo-600 whitespace-nowrap flex items-center gap-2">
+                        <span class="w-5 h-5 rounded-full bg-indigo-600 text-white text-xs font-bold flex items-center justify-center">1</span>
+                        <span>Check-in</span>
+                    </button>
+                    <button onclick="switchStep(2)" id="step-btn-2" class="step-tab px-4 py-3 font-semibold text-sm border-b-2 border-transparent text-slate-500 hover:text-slate-700 whitespace-nowrap flex items-center gap-2">
+                        <span class="w-5 h-5 rounded-full bg-slate-100 text-slate-600 text-xs font-bold flex items-center justify-center">2</span>
+                        <span>Psychoeducation</span>
+                    </button>
+                    <button onclick="switchStep(3)" id="step-btn-3" class="step-tab px-4 py-3 font-semibold text-sm border-b-2 border-transparent text-slate-500 hover:text-slate-700 whitespace-nowrap flex items-center gap-2">
+                        <span class="w-5 h-5 rounded-full bg-slate-100 text-slate-600 text-xs font-bold flex items-center justify-center">3</span>
+                        <span>Skill Practice</span>
+                    </button>
+                    <button onclick="switchStep(4)" id="step-btn-4" class="step-tab px-4 py-3 font-semibold text-sm border-b-2 border-transparent text-slate-500 hover:text-slate-700 whitespace-nowrap flex items-center gap-2">
+                        <span class="w-5 h-5 rounded-full bg-slate-100 text-slate-600 text-xs font-bold flex items-center justify-center">4</span>
+                        <span>Homework</span>
+                    </button>
+                </div>
+
+                <!-- Step Content Container -->
+                <div id="step-content" class="min-h-[280px]">
+                    <!-- Injected via JavaScript -->
+                </div>
+            </div>
+
+            <!-- Bottom Navigation -->
+            <div class="flex items-center justify-between pt-8 mt-8 border-t border-slate-200">
+                <button onclick="navigateStep(-1)" id="prev-step-btn" class="px-5 py-2.5 rounded-xl border border-slate-300 font-medium text-sm text-slate-700 hover:bg-slate-50 transition disabled:opacity-40">&larr; Previous Step</button>
+                <button onclick="navigateStep(1)" id="next-step-btn" class="px-6 py-2.5 rounded-xl bg-indigo-600 hover:bg-indigo-700 font-medium text-sm text-white transition shadow-sm">Next Step &rarr;</button>
+            </div>
+
+        </main>
+
+    </div>
+
+    <script>
+        const sessionsData = [
+            { id: 1, title: "Understanding Social Anxiety & Triggers", subtitle: "Establish baseline distress and identify your core anxiety patterns.", focus: "Mind Reading & Safety Behaviors" },
+            { id: 2, title: "Identifying Automatic Thoughts", subtitle: "Spotting cognitive traps and negative automatic thoughts in real time.", focus: "Catastrophizing & All-or-Nothing" },
+            { id: 3, title: "Cognitive Restructuring & Evidence Testing", subtitle: "Putting your anxious thoughts on trial using evidence-based reasoning.", focus: "Evidence For vs. Evidence Against" },
+            { id: 4, title: "Behavioral Exposure Hierarchies", subtitle: "Building your SUDs ladder and facing feared situations step by step.", focus: "SUDs 0-100 Ladder & Habituation" },
+            { id: 5, title: "Dropping Safety Behaviors", subtitle: "Unmasking hidden safety strategies and letting go of mental shields.", focus: "Post-Event Processing & Safety Aids" },
+            { id: 6, title: "Core Beliefs & Self-Compassion", subtitle: "Challenging deep-seated assumptions about unworthiness and defectiveness.", focus: "Deep Schema Restructuring" },
+            { id: 7, title: "Advanced Social Experiments", subtitle: "Deliberately testing worst-case scenarios and taking social risks.", focus: "Behavioral Experiments in Public" },
+            { id: 8, title: "Relapse Prevention & Long-Term Maintenance", subtitle: "Consolidating gains, preparing for setbacks, and planning your future.", focus: "Maintenance Plan & Graduation" }
+        ];
+
+        let currentSession = 1;
+        let currentStep = 1;
+
+        // Load saved state or set defaults
+        let appState = JSON.parse(localStorage.getItem('icbt_accordion_state_v3')) || {
+            unlockedWeeks: [1],
+            completedWeeks: [],
+            weekStepProgress: { 1: 1, 2: 1, 3: 1, 4: 1, 5: 1, 6: 1, 7: 1, 8: 1 }
+        };
+
+        function saveState() {
+            localStorage.setItem('icbt_accordion_state_v3', JSON.stringify(appState));
+        }
+
+        function resetProgress() {
+            if (confirm("Reset all saved session progress? This will collapse Weeks 2-8.")) {
+                localStorage.removeItem('icbt_accordion_state_v3');
+                appState = {
+                    unlockedWeeks: [1],
+                    completedWeeks: [],
+                    weekStepProgress: { 1: 1, 2: 1, 3: 1, 4: 1, 5: 1, 6: 1, 7: 1, 8: 1 }
+                };
+                currentSession = 1;
+                currentStep = 1;
+                saveState();
+                updateUI();
+                showToast("🔄 Progress reset to Week 1");
+            }
+        }
+
+        function renderSidebarAccordion() {
+            const nav = document.getElementById('accordion-nav');
+            nav.innerHTML = '';
+            
+            document.getElementById('unlocked-count').innerText = `${appState.unlockedWeeks.length}/8 Unlocked`;
+
+            sessionsData.forEach(s => {
+                const isSelected = s.id === currentSession;
+                const isUnlocked = appState.unlockedWeeks.includes(s.id);
+                const isCompleted = appState.completedWeeks.includes(s.id);
+
+                const weekContainer = document.createElement('div');
+                weekContainer.className = "border border-slate-200 rounded-xl overflow-hidden transition bg-white shadow-2xs";
+
+                if (isUnlocked) {
+                    const isExpanded = isSelected;
+                    
+                    weekContainer.innerHTML = `
+                        <button onclick="selectWeek(${s.id})" class="w-full text-left px-3.5 py-3 text-sm font-medium transition flex items-center justify-between ${isSelected ? 'bg-indigo-50 text-indigo-900 font-semibold' : 'bg-white hover:bg-slate-50 text-slate-700'}">
+                            <div class="flex items-center space-x-2.5 truncate">
+                                <span class="w-6 h-6 rounded-md ${isCompleted ? 'bg-emerald-500 text-white' : 'bg-indigo-100 text-indigo-700'} text-xs font-bold flex items-center justify-center shrink-0">
+                                    ${isCompleted ? '✓' : s.id}
+                                </span>
+                                <div class="truncate">
+                                    <div class="truncate text-xs ${isSelected ? 'font-bold text-indigo-950' : 'text-slate-800'}">Week ${s.id}</div>
+                                    <div class="text-[10px] text-slate-400 truncate">${s.focus}</div>
+                                </div>
+                            </div>
+                            <span class="text-[10px] text-slate-400 ml-1">${isExpanded ? '▼' : '▶'}</span>
+                        </button>
+                        ${isExpanded ? `
+                            <div class="bg-slate-50 border-t border-slate-200 p-2 space-y-1 text-xs">
+                                <button onclick="switchStep(1)" class="w-full text-left px-3 py-1.5 rounded-lg flex items-center justify-between ${currentStep === 1 ? 'bg-indigo-600 text-white font-semibold' : 'text-slate-600 hover:bg-slate-200'}">
+                                    <span>1. Check-in</span>
+                                    ${currentStep > 1 ? '<span>✓</span>' : ''}
+                                </button>
+                                <button onclick="switchStep(2)" class="w-full text-left px-3 py-1.5 rounded-lg flex items-center justify-between ${currentStep === 2 ? 'bg-indigo-600 text-white font-semibold' : 'text-slate-600 hover:bg-slate-200'}">
+                                    <span>2. Psychoeducation</span>
+                                    ${currentStep > 2 ? '<span>✓</span>' : ''}
+                                </button>
+                                <button onclick="switchStep(3)" class="w-full text-left px-3 py-1.5 rounded-lg flex items-center justify-between ${currentStep === 3 ? 'bg-indigo-600 text-white font-semibold' : 'text-slate-600 hover:bg-slate-200'}">
+                                    <span>3. Skill Practice</span>
+                                    ${currentStep > 3 ? '<span>✓</span>' : ''}
+                                </button>
+                                <button onclick="switchStep(4)" class="w-full text-left px-3 py-1.5 rounded-lg flex items-center justify-between ${currentStep === 4 ? 'bg-indigo-600 text-white font-semibold' : 'text-slate-600 hover:bg-slate-200'}">
+                                    <span>4. Homework</span>
+                                    ${isCompleted ? '<span>✓</span>' : ''}
+                                </button>
+                            </div>
+                        ` : ''}
+                    `;
+                } else {
+                    weekContainer.innerHTML = `
+                        <div class="w-full px-3.5 py-3 text-sm font-medium bg-slate-50/70 text-slate-400 flex items-center justify-between cursor-not-allowed">
+                            <div class="flex items-center space-x-2.5 truncate">
+                                <span class="w-6 h-6 rounded-md bg-slate-200 text-slate-400 text-xs font-bold flex items-center justify-center shrink-0">🔒</span>
+                                <div class="truncate">
+                                    <div class="truncate text-xs text-slate-400 font-medium">Week ${s.id}</div>
+                                    <div class="text-[10px] text-slate-300 truncate">Locked Module</div>
+                                </div>
+                            </div>
+                            <span class="text-[10px] uppercase font-bold text-slate-300">Locked</span>
+                        </div>
+                    `;
+                }
+
+                nav.appendChild(weekContainer);
+            });
+        }
+
+        function selectWeek(weekNum) {
+            currentSession = weekNum;
+            currentStep = appState.weekStepProgress[weekNum] || 1;
+            updateUI();
+        }
+
+        function updateUI() {
+            renderSidebarAccordion();
+            const session = sessionsData[currentSession - 1];
+            
+            document.getElementById('session-badge').innerText = `Week ${session.id} of 8`;
+            document.getElementById('session-title').innerText = session.title;
+            document.getElementById('session-subtitle').innerText = session.subtitle;
+            document.getElementById('progress-week-num').innerText = session.id;
+
+            const percent = currentStep * 25;
+            document.getElementById('progress-percent').innerText = `${percent}%`;
+            
+            const barFill = document.getElementById('progress-bar-fill');
+            barFill.style.width = `${percent}%`;
+
+            const statusText = document.getElementById('completion-status-text');
+            if (appState.completedWeeks.includes(currentSession)) {
+                barFill.className = "bg-emerald-500 h-2.5 rounded-full transition-all duration-300";
+                statusText.innerText = "Week 100% Complete";
+                statusText.className = "text-xs font-semibold text-emerald-800 bg-emerald-50 border border-emerald-200 px-2.5 py-1 rounded-md";
+            } else {
+                barFill.className = "bg-indigo-600 h-2.5 rounded-full transition-all duration-300";
+                statusText.innerText = `In Progress (${percent}%)`;
+                statusText.className = "text-xs font-semibold text-amber-800 bg-amber-50 border border-amber-200 px-2.5 py-1 rounded-md";
+            }
+
+            for (let i = 1; i <= 4; i++) {
+                const tab = document.getElementById(`step-btn-${i}`);
+                const badge = tab.querySelector('span');
+                if (i === currentStep) {
+                    tab.className = "step-tab px-4 py-3 font-semibold text-sm border-b-2 border-indigo-600 text-indigo-600 whitespace-nowrap flex items-center gap-2";
+                    badge.className = "w-5 h-5 rounded-full bg-indigo-600 text-white text-xs font-bold flex items-center justify-center";
+                } else {
+                    tab.className = "step-tab px-4 py-3 font-semibold text-sm border-b-2 border-transparent text-slate-500 hover:text-slate-700 whitespace-nowrap flex items-center gap-2";
+                    badge.className = "w-5 h-5 rounded-full bg-slate-100 text-slate-600 text-xs font-bold flex items-center justify-center";
+                }
+            }
+
+            appState.weekStepProgress[currentSession] = currentStep;
+            saveState();
+
+            renderStepContent();
+            updateNavigationButtons();
+        }
+
+        function renderStepContent() {
+            const container = document.getElementById('step-content');
+            
+            if (currentStep === 1) {
+                container.innerHTML = `
+                    <h3 class="text-lg font-bold text-slate-900 mb-1">Step 1: Weekly Distress Check-in</h3>
+                    <p class="text-slate-600 text-sm mb-6">Rate your average distress across social scenarios over the past week (0-100%).</p>
+                    <div class="space-y-4">
+                        ${getSliderQuestion("1. Anticipatory anxiety before social events")}
+                        ${getSliderQuestion("2. Fear of being scrutinized or evaluated negatively")}
+                        ${getSliderQuestion("3. Urge to escape or avoid social interactions")}
+                        ${getSliderQuestion("4. Physical distress (sweating, trembling, blushing)")}
+                    </div>
+                `;
+            } else if (currentStep === 2) {
+                container.innerHTML = `
+                    <h3 class="text-lg font-bold text-slate-900 mb-1">Step 2: Psychoeducation & Trigger Mapping</h3>
+                    <p class="text-slate-600 text-sm mb-4">Core Focus: <strong class="text-indigo-600">${sessionsData[currentSession - 1].focus}</strong></p>
+                    <div class="bg-indigo-50 border border-indigo-100 rounded-2xl p-5 mb-6">
+                        <h4 class="font-bold text-indigo-900 text-sm mb-1.5">Week ${currentSession} Clinical Concept</h4>
+                        <p class="text-indigo-800 text-xs leading-relaxed">Social anxiety is maintained when negative predictions go unchallenged. Mapping triggers brings conscious awareness to your physical and cognitive responses.</p>
+                    </div>
+                    <h4 class="font-bold text-slate-900 mb-3 text-sm">Select Your Target Triggers:</h4>
+                    <div class="grid sm:grid-cols-2 gap-3">
+                        <label class="flex items-center space-x-3 p-3 rounded-xl border border-slate-200 hover:bg-slate-50 cursor-pointer text-sm"><input type="checkbox" checked class="rounded text-indigo-600"> <span>Speaking up during group discussions</span></label>
+                        <label class="flex items-center space-x-3 p-3 rounded-xl border border-slate-200 hover:bg-slate-50 cursor-pointer text-sm"><input type="checkbox" class="rounded text-indigo-600"> <span>Making small talk with new acquaintances</span></label>
+                        <label class="flex items-center space-x-3 p-3 rounded-xl border border-slate-200 hover:bg-slate-50 cursor-pointer text-sm"><input type="checkbox" class="rounded text-indigo-600"> <span>Eating or drinking while observed</span></label>
+                        <label class="flex items-center space-x-3 p-3 rounded-xl border border-slate-200 hover:bg-slate-50 cursor-pointer text-sm"><input type="checkbox" class="rounded text-indigo-600"> <span>Expressing disagreement or boundaries</span></label>
+                    </div>
+                `;
+            } else if (currentStep === 3) {
+                container.innerHTML = `
+                    <h3 class="text-lg font-bold text-slate-900 mb-1">Step 3: Skill Practice & Thought Restructuring</h3>
+                    <p class="text-slate-600 text-sm mb-6">Record an automatic negative thought from this week and reframe it rationally.</p>
+                    <div class="space-y-4">
+                        <div>
+                            <label class="block text-xs font-bold text-slate-700 uppercase mb-1">Triggering Situation</label>
+                            <input type="text" placeholder="e.g. Joined a group video call" class="w-full p-3 rounded-xl border border-slate-300 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500">
+                        </div>
+                        <div>
+                            <label class="block text-xs font-bold text-slate-700 uppercase mb-1">Automatic Thought & Initial Belief %</label>
+                            <input type="text" placeholder="e.g. Everyone thinks I have nothing valuable to say (80%)" class="w-full p-3 rounded-xl border border-slate-300 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500">
+                        </div>
+                        <div>
+                            <label class="block text-xs font-bold text-slate-700 uppercase mb-1">Balanced Rational Reframe</label>
+                            <textarea rows="3" placeholder="What objective evidence contradicts this thought?" class="w-full p-3 rounded-xl border border-slate-300 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500"></textarea>
+                        </div>
+                    </div>
+                `;
+            } else if (currentStep === 4) {
+                const hasNextWeek = currentSession < 8;
+
+                container.innerHTML = `
+                    <h3 class="text-lg font-bold text-slate-900 mb-1">Step 4: Weekly Homework & Exposure Plan</h3>
+                    <p class="text-slate-600 text-sm mb-6">Commit to one behavioral experiment before unlocking the next module.</p>
+                    <div class="bg-slate-50 border border-slate-200 rounded-2xl p-5 space-y-4 mb-6">
+                        <div>
+                            <label class="block text-xs font-bold text-slate-700 uppercase mb-1">Behavioral Experiment Plan</label>
+                            <input type="text" placeholder="e.g. Ask a shop assistant for assistance while maintaining eye contact" class="w-full p-3 rounded-xl border border-slate-300 bg-white text-sm">
+                        </div>
+                        <div>
+                            <label class="block text-xs font-bold text-slate-700 uppercase mb-1">Predicted Distress Level (SUDs 0-100)</label>
+                            <input type="range" min="0" max="100" value="45" class="w-full accent-indigo-600">
+                        </div>
+                    </div>
+
+                    ${hasNextWeek ? `
+                        <div class="bg-slate-900 text-white rounded-2xl p-6 text-center shadow-lg relative overflow-hidden">
+                            <h4 class="text-lg font-bold mb-1">Finished Week ${currentSession}?</h4>
+                            <p class="text-slate-300 text-xs mb-4">Click below to uncollapse and unlock Week ${currentSession + 1} in your sidebar roadmap.</p>
+                            <button onclick="unlockNextWeek()" class="bg-emerald-500 hover:bg-emerald-600 text-white font-bold px-6 py-3 rounded-xl text-sm transition shadow-sm inline-flex items-center gap-2">
+                                <span>🔓 Unlock & Uncollapse Week ${currentSession + 1}</span>
+                            </button>
+                        </div>
+                    ` : `
+                        <div class="bg-emerald-900 text-white rounded-2xl p-6 text-center shadow-lg">
+                            <h4 class="text-xl font-bold mb-1">🎉 Program Complete!</h4>
+                            <p class="text-emerald-200 text-xs">You have completed all 8 weeks of the iCBT Social Anxiety Roadmap!</p>
+                        </div>
+                    `}
+                `;
+            }
+        }
+
+        function getSliderQuestion(text) {
+            return `
+                <div class="bg-slate-50 p-4 rounded-xl border border-slate-200">
+                    <div class="flex justify-between items-center mb-2">
+                        <span class="text-sm font-medium text-slate-800">${text}</span>
+                        <span class="text-xs font-bold text-indigo-600 bg-indigo-50 px-2 py-0.5 rounded">25%</span>
+                    </div>
+                    <input type="range" min="0" max="100" value="25" class="w-full accent-indigo-600" oninput="this.previousElementSibling.lastElementChild.innerText = this.value + '%'">
+                </div>
+            `;
+        }
+
+        function switchStep(stepNum) {
+            currentStep = stepNum;
+            updateUI();
+        }
+
+        function navigateStep(direction) {
+            currentStep += direction;
+            if (currentStep < 1) currentStep = 1;
+            if (currentStep > 4) currentStep = 4;
+            updateUI();
+        }
+
+        function updateNavigationButtons() {
+            const prevBtn = document.getElementById('prev-step-btn');
+            const nextBtn = document.getElementById('next-step-btn');
+
+            prevBtn.disabled = (currentStep === 1);
+
+            if (currentStep === 4) {
+                nextBtn.style.display = 'none';
+            } else {
+                nextBtn.style.display = 'inline-block';
+            }
+        }
+
+        function unlockNextWeek() {
+            if (!appState.completedWeeks.includes(currentSession)) {
+                appState.completedWeeks.push(currentSession);
+            }
+            
+            const nextWeekNum = currentSession + 1;
+            if (nextWeekNum <= 8 && !appState.unlockedWeeks.includes(nextWeekNum)) {
+                appState.unlockedWeeks.push(nextWeekNum);
+            }
+
+            saveState();
+            showToast(`🚀 Week ${currentSession} completed! Week ${nextWeekNum <= 8 ? nextWeekNum : '8'} uncollapsed.`);
+            
+            if (nextWeekNum <= 8) {
+                currentSession = nextWeekNum;
+                currentStep = 1;
+            }
+            updateUI();
+        }
+
+        function showToast(msg) {
+            const toast = document.getElementById('toast');
+            document.getElementById('toast-message').innerText = msg;
+            toast.classList.remove('translate-y-20', 'opacity-0');
+            setTimeout(() => {
+                toast.classList.add('translate-y-20', 'opacity-0');
+            }, 3000);
+        }
+
+        // Initialize
+        updateUI();
+    </script>
+
+</body>
+</html>
