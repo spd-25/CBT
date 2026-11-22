@@ -1,0 +1,533 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Loop Breaker | Overthinking & Rumination Reset</title>
+    <!-- Load Tailwind CSS for responsive utility styling -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Load Inter font family for clean readability -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+        }
+    </style>
+</head>
+<body class="bg-slate-100 text-slate-800 antialiased min-h-screen flex flex-col">
+
+    <!-- Top Navigation Bar -->
+    <header class="bg-white border-b border-slate-200 sticky top-0 z-40">
+        <div class="max-w-6xl mx-auto px-4 sm:px-6 py-3 flex items-center justify-between gap-4">
+            <div class="flex items-center space-x-3 min-w-0">
+                <a href="index.html" class="text-slate-500 hover:text-slate-800 text-sm font-medium shrink-0 transition-colors">&larr; Home</a>
+                <span class="text-slate-300">|</span>
+                <a href="app.html" class="text-slate-500 hover:text-indigo-600 text-sm font-medium hidden sm:inline shrink-0 transition-colors">8-Week Roadmap</a>
+                <span class="text-slate-300 hidden sm:inline">|</span>
+                <span class="font-bold text-slate-900 truncate">Loop Breaker</span>
+            </div>
+            <div class="flex items-center gap-3 shrink-0">
+                <button type="button" onclick="clearSavedLoops()" class="text-xs text-slate-400 hover:text-rose-600 transition-colors underline cursor-pointer p-1">Clear History</button>
+                <span class="text-xs bg-indigo-50 text-indigo-700 font-semibold px-3 py-1 rounded-full border border-indigo-100">
+                    Saved Locally
+                </span>
+            </div>
+        </div>
+    </header>
+
+    <!-- Bottom-Right Toast Notification -->
+    <div id="toast" role="status" aria-live="polite" class="fixed bottom-5 right-5 z-50 transform translate-y-20 opacity-0 transition-all duration-300 pointer-events-none bg-slate-900 text-white text-xs font-medium px-4 py-3 rounded-xl shadow-xl">
+        <span id="toast-message">Saved to your browser</span>
+    </div>
+
+    <!-- Main 12-Column Responsive Layout -->
+    <main class="max-w-6xl mx-auto w-full px-4 sm:px-6 py-8 flex-grow grid grid-cols-1 lg:grid-cols-12 gap-8">
+
+        <!-- Left 8 Columns: Overthinking Reset Workflow Card -->
+        <section class="lg:col-span-8 bg-white rounded-2xl border border-slate-200 p-6 sm:p-8 shadow-sm flex flex-col justify-between">
+            <div>
+                <!-- Card Header & Empathetic Intro -->
+                <div class="mb-6">
+                    <span class="text-xs font-bold uppercase tracking-wider bg-indigo-50 text-indigo-700 px-3 py-1 rounded-full">Overthinking Reset</span>
+                    <h1 class="text-2xl sm:text-3xl font-extrabold text-slate-900 mt-3 tracking-tight">When Your Brain Won't Hit Pause</h1>
+                    <p class="text-slate-600 text-sm mt-1.5 leading-relaxed">Thinking deeply is a strength—until your mind starts chewing on the same thought expecting a different answer. Let's untangle it in four quick steps.</p>
+                </div>
+
+                <!-- 4 Interactive Step Tabs -->
+                <div class="grid grid-cols-2 sm:grid-cols-4 gap-2 mb-8">
+                    <button type="button" onclick="goToStep(1)" id="tab-1" class="px-3 py-2.5 rounded-xl text-xs font-bold text-left border transition cursor-pointer"></button>
+                    <button type="button" onclick="goToStep(2)" id="tab-2" class="px-3 py-2.5 rounded-xl text-xs font-bold text-left border transition cursor-pointer"></button>
+                    <button type="button" onclick="goToStep(3)" id="tab-3" class="px-3 py-2.5 rounded-xl text-xs font-bold text-left border transition cursor-pointer"></button>
+                    <button type="button" onclick="goToStep(4)" id="tab-4" class="px-3 py-2.5 rounded-xl text-xs font-bold text-left border transition cursor-pointer"></button>
+                </div>
+
+                <!-- Dynamic Step Content Panel -->
+                <div id="step-panel" class="min-h-[300px]"></div>
+            </div>
+
+            <!-- Bottom Step & Entry Controls -->
+            <div class="flex flex-wrap items-center justify-between gap-3 pt-6 mt-8 border-t border-slate-200">
+                <button type="button" onclick="changeStep(-1)" id="prev-btn" class="px-4 py-2.5 rounded-xl border border-slate-300 text-sm font-semibold text-slate-700 hover:bg-slate-50 disabled:opacity-40 disabled:cursor-not-allowed transition cursor-pointer">&larr; Back</button>
+                <div class="flex items-center gap-3">
+                    <button type="button" onclick="saveCurrentLoop()" class="px-4 py-2.5 rounded-xl border border-indigo-200 bg-indigo-50 text-indigo-700 hover:bg-indigo-100 text-sm font-semibold transition cursor-pointer">Save Entry</button>
+                    <button type="button" onclick="changeStep(1)" id="next-btn" class="px-5 py-2.5 rounded-xl bg-indigo-600 hover:bg-indigo-700 text-white text-sm font-semibold transition shadow-sm cursor-pointer">Next Step &rarr;</button>
+                </div>
+            </div>
+        </section>
+
+        <!-- Right 4 Columns: Timebox Timer & Recent Loop Resets -->
+        <aside class="lg:col-span-4 space-y-6">
+
+            <!-- Timebox Timer Card -->
+            <div class="bg-white rounded-2xl border border-slate-200 p-5 shadow-sm">
+                <div class="flex items-center justify-between gap-2 mb-2">
+                    <h2 class="text-sm font-bold text-slate-900">Timebox Timer</h2>
+                    <span class="text-[11px] font-semibold text-indigo-600 bg-indigo-50 px-2 py-0.5 rounded-full">Stop Endless Replays</span>
+                </div>
+                <p class="text-xs text-slate-500 mb-4 leading-relaxed">Give the problem a fair, bounded window—then close the tab and do one real-world thing.</p>
+
+                <div class="bg-slate-900 text-white rounded-xl p-4 text-center mb-4">
+                    <div id="timer-display" class="text-3xl font-extrabold tracking-wider font-mono">10:00</div>
+                    <div id="timer-label" class="text-[11px] text-slate-400 mt-1">Ready when you are</div>
+                </div>
+
+                <!-- Preset Duration Buttons -->
+                <div class="flex gap-2 mb-3">
+                    <button type="button" onclick="setTimerMinutes(5)" class="flex-1 py-2 rounded-lg border border-slate-200 text-xs font-semibold text-slate-700 hover:bg-slate-50 transition cursor-pointer">5 min</button>
+                    <button type="button" onclick="setTimerMinutes(10)" class="flex-1 py-2 rounded-lg border border-slate-200 text-xs font-semibold text-slate-700 hover:bg-slate-50 transition cursor-pointer">10 min</button>
+                    <button type="button" onclick="setTimerMinutes(15)" class="flex-1 py-2 rounded-lg border border-slate-200 text-xs font-semibold text-slate-700 hover:bg-slate-50 transition cursor-pointer">15 min</button>
+                </div>
+
+                <!-- Timer Start/Pause/Resume & Reset Controls -->
+                <div class="flex gap-2">
+                    <button type="button" onclick="toggleTimer()" id="timer-toggle-btn" class="flex-1 py-2.5 rounded-xl bg-indigo-600 hover:bg-indigo-700 text-white text-xs font-bold transition cursor-pointer">Start</button>
+                    <button type="button" onclick="resetTimer()" class="px-3.5 py-2.5 rounded-xl border border-slate-300 text-slate-700 hover:bg-slate-50 text-xs font-semibold transition cursor-pointer">Reset</button>
+                </div>
+            </div>
+
+            <!-- Recent Loop Resets Card -->
+            <div class="bg-white rounded-2xl border border-slate-200 p-5 shadow-sm">
+                <div class="flex items-center justify-between mb-3">
+                    <h2 class="text-sm font-bold text-slate-900">Recent Loop Resets</h2>
+                    <span id="saved-count" class="text-xs font-semibold text-slate-500">0 saved</span>
+                </div>
+                <div id="saved-loops-list" class="space-y-3 max-h-96 overflow-y-auto pr-1">
+                    <p class="text-xs text-slate-400">No entries saved yet. Complete a reset and hit "Save Entry" to keep track of patterns that trip you up.</p>
+                </div>
+            </div>
+
+        </aside>
+    </main>
+
+    <script>
+        // LocalStorage key for persisting draft state and saved loop resets
+        const STORAGE_KEY = 'cbt_loop_breaker_v1';
+
+        // Core overthinking loop categories
+        const loopTypes = [
+            {
+                id: 'rumination',
+                title: 'The Past Replay',
+                desc: 'Re-editing a conversation, mistake, or awkward moment like a movie that already ended.'
+            },
+            {
+                id: 'worry',
+                title: 'The "What-If" Spiral',
+                desc: 'Fast-forwarding into worst-case futures and rehearsing problems that haven\'t happened yet.'
+            },
+            {
+                id: 'paralysis',
+                title: 'Decision Paralysis',
+                desc: 'Waiting for 100% certainty before picking an option, stalling momentum for days or weeks.'
+            }
+        ];
+
+        // 4-step workflow definitions
+        const stepMeta = [
+            { num: 1, title: 'Name the Loop' },
+            { num: 2, title: 'Control Check' },
+            { num: 3, title: 'Reality Check' },
+            { num: 4, title: 'Next Action' }
+        ];
+
+        // Default clean draft factory
+        function createEmptyDraft() {
+            return {
+                thought: '',
+                loopType: 'worry',
+                spinLevel: 65,
+                controllable: 'partly',
+                parkedNote: '',
+                worstCase: '',
+                bestCase: '',
+                likelyCase: '',
+                nextAction: ''
+            };
+        }
+
+        // Safely load state from localStorage with fallback
+        function loadInitialState() {
+            const fallback = {
+                step: 1,
+                draft: createEmptyDraft(),
+                savedLoops: []
+            };
+            try {
+                const raw = localStorage.getItem(STORAGE_KEY);
+                if (!raw) return fallback;
+                const parsed = JSON.parse(raw);
+                return {
+                    step: typeof parsed.step === 'number' && parsed.step >= 1 && parsed.step <= 4 ? parsed.step : 1,
+                    draft: Object.assign(createEmptyDraft(), parsed.draft || {}),
+                    savedLoops: Array.isArray(parsed.savedLoops) ? parsed.savedLoops : []
+                };
+            } catch (err) {
+                console.warn('Unable to read saved state from localStorage:', err);
+                return fallback;
+            }
+        }
+
+        let state = loadInitialState();
+
+        // Persist current application state to localStorage
+        function persist() {
+            try {
+                localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+            } catch (err) {
+                console.warn('Unable to write state to localStorage:', err);
+            }
+        }
+
+        // Display transient toast message at bottom-right
+        let toastTimeout = null;
+        function showToast(msg) {
+            const toast = document.getElementById('toast');
+            const messageEl = document.getElementById('toast-message');
+            if (!toast || !messageEl) return;
+
+            messageEl.innerText = msg;
+            toast.classList.remove('translate-y-20', 'opacity-0');
+
+            if (toastTimeout) clearTimeout(toastTimeout);
+            toastTimeout = setTimeout(() => {
+                toast.classList.add('translate-y-20', 'opacity-0');
+            }, 2800);
+        }
+
+        // Navigate directly to a specific step (1-4)
+        function goToStep(n) {
+            const targetStep = Math.min(4, Math.max(1, Number(n) || 1));
+            state.step = targetStep;
+            persist();
+            render();
+        }
+
+        // Step forward or backward relative to current step
+        function changeStep(delta) {
+            const next = Math.min(4, Math.max(1, state.step + delta));
+            goToStep(next);
+        }
+
+        // Update a field on the active draft and persist
+        function updateDraft(field, value) {
+            state.draft[field] = value;
+            persist();
+        }
+
+        // Render the 4 step tabs and active styling
+        function renderTabs() {
+            stepMeta.forEach(s => {
+                const btn = document.getElementById(`tab-${s.num}`);
+                if (!btn) return;
+                const active = state.step === s.num;
+                btn.className = `px-3 py-2.5 rounded-xl text-xs font-bold text-left border transition cursor-pointer ${
+                    active
+                        ? 'bg-indigo-600 text-white border-indigo-600 shadow-xs'
+                        : 'bg-slate-50 text-slate-600 border-slate-200 hover:bg-slate-100'
+                }`;
+                btn.innerHTML = `<div class="opacity-80 text-[10px] uppercase">Step ${s.num}</div><div>${s.title}</div>`;
+            });
+        }
+
+        // Render the active step's interactive inputs
+        function renderStep() {
+            const panel = document.getElementById('step-panel');
+            if (!panel) return;
+            const d = state.draft;
+
+            if (state.step === 1) {
+                panel.innerHTML = `
+                    <h2 class="text-lg font-bold text-slate-900 mb-1">Step 1: Catch It Without Judging Yourself</h2>
+                    <p class="text-slate-600 text-sm mb-5">You don't have to fix the whole thought right away. Just put words on what's spinning and what kind of loop it is.</p>
+
+                    <div class="mb-5">
+                        <label for="thought-input" class="block text-xs font-bold uppercase text-slate-700 mb-1.5">What is the thought on repeat right now?</label>
+                        <textarea id="thought-input" rows="3" oninput="updateDraft('thought', this.value)" placeholder="e.g. I keep replaying what I said in today's meeting and wondering if I sounded unprepared..." class="w-full p-3 rounded-xl border border-slate-300 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500">${escapeHtml(d.thought)}</textarea>
+                    </div>
+
+                    <div class="mb-5">
+                        <span class="block text-xs font-bold uppercase text-slate-700 mb-2">Which loop feels closest?</span>
+                        <div class="grid sm:grid-cols-3 gap-3">
+                            ${loopTypes.map(t => `
+                                <button type="button" onclick="updateDraft('loopType', '${t.id}'); renderStep();" class="text-left p-3.5 rounded-xl border transition cursor-pointer ${
+                                    d.loopType === t.id
+                                        ? 'border-indigo-600 bg-indigo-50/70 ring-1 ring-indigo-600'
+                                        : 'border-slate-200 hover:bg-slate-50'
+                                }">
+                                    <div class="text-xs font-bold text-slate-900">${escapeHtml(t.title)}</div>
+                                    <div class="text-[11px] text-slate-600 mt-1 leading-relaxed">${escapeHtml(t.desc)}</div>
+                                </button>
+                            `).join('')}
+                        </div>
+                    </div>
+
+                    <div class="bg-slate-50 p-4 rounded-xl border border-slate-200">
+                        <div class="flex justify-between items-center mb-2">
+                            <label for="spin-slider" class="text-xs font-bold uppercase text-slate-700">How loud is the mental spin right now?</label>
+                            <span id="spin-val" class="text-xs font-bold text-indigo-700 bg-indigo-50 px-2.5 py-0.5 rounded-full">${d.spinLevel}%</span>
+                        </div>
+                        <input id="spin-slider" type="range" min="0" max="100" value="${d.spinLevel}" oninput="updateDraft('spinLevel', Number(this.value)); document.getElementById('spin-val').innerText = this.value + '%';" class="w-full accent-indigo-600 cursor-pointer">
+                    </div>
+                `;
+            } else if (state.step === 2) {
+                panel.innerHTML = `
+                    <h2 class="text-lg font-bold text-slate-900 mb-1">Step 2: Is Thinking Actually Helping Here?</h2>
+                    <p class="text-slate-600 text-sm mb-5">Helpful reflection leads to a decision or action. Overthinking usually circles around things outside your control or tries to guarantee certainty that doesn't exist.</p>
+
+                    <div class="grid sm:grid-cols-3 gap-3 mb-5">
+                        <button type="button" onclick="updateDraft('controllable', 'yes'); renderStep();" class="p-3.5 rounded-xl border text-left transition cursor-pointer ${d.controllable === 'yes' ? 'border-emerald-600 bg-emerald-50 ring-1 ring-emerald-600' : 'border-slate-200 hover:bg-slate-50'}">
+                            <div class="text-xs font-bold text-slate-900">Actionable Today</div>
+                            <div class="text-[11px] text-slate-600 mt-1 leading-relaxed">There's a clear step I can take soon.</div>
+                        </button>
+                        <button type="button" onclick="updateDraft('controllable', 'partly'); renderStep();" class="p-3.5 rounded-xl border text-left transition cursor-pointer ${d.controllable === 'partly' ? 'border-amber-500 bg-amber-50 ring-1 ring-amber-500' : 'border-slate-200 hover:bg-slate-50'}">
+                            <div class="text-xs font-bold text-slate-900">Partly in My Hands</div>
+                            <div class="text-[11px] text-slate-600 mt-1 leading-relaxed">I control my effort, not other people's reactions or outcomes.</div>
+                        </button>
+                        <button type="button" onclick="updateDraft('controllable', 'no'); renderStep();" class="p-3.5 rounded-xl border text-left transition cursor-pointer ${d.controllable === 'no' ? 'border-indigo-600 bg-indigo-50 ring-1 ring-indigo-600' : 'border-slate-200 hover:bg-slate-50'}">
+                            <div class="text-xs font-bold text-slate-900">Out of My Control</div>
+                            <div class="text-[11px] text-slate-600 mt-1 leading-relaxed">Already happened or depends on factors I can't force.</div>
+                        </button>
+                    </div>
+
+                    <div class="bg-indigo-50/70 border border-indigo-100 rounded-xl p-4">
+                        <label for="parked-note" class="block text-xs font-bold uppercase text-indigo-950 mb-1">Worry Parking Lot (Optional)</label>
+                        <p class="text-xs text-indigo-800 mb-2">Drop any lingering "what-ifs" here so your brain doesn't have to hold them in working memory.</p>
+                        <textarea id="parked-note" rows="2" oninput="updateDraft('parkedNote', this.value)" placeholder="Park the extra worries here for later..." class="w-full p-2.5 rounded-lg border border-indigo-200 bg-white text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500">${escapeHtml(d.parkedNote)}</textarea>
+                    </div>
+                `;
+            } else if (state.step === 3) {
+                panel.innerHTML = `
+                    <h2 class="text-lg font-bold text-slate-900 mb-1">Step 3: Zoom Out to Reality</h2>
+                    <p class="text-slate-600 text-sm mb-5">Overthinking treats a scary possibility like a certainty. Put all three scenarios side by side to give your nervous system some room to breathe.</p>
+
+                    <div class="space-y-4">
+                        <div>
+                            <label for="worst-case" class="block text-xs font-bold uppercase text-slate-700 mb-1">Worst Case (and how I'd handle it if it happened)</label>
+                            <input id="worst-case" type="text" value="${escapeAttr(d.worstCase)}" oninput="updateDraft('worstCase', this.value)" placeholder="e.g. They think I missed a detail—I can follow up calmly with the notes." class="w-full p-3 rounded-xl border border-slate-300 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500">
+                        </div>
+                        <div>
+                            <label for="best-case" class="block text-xs font-bold uppercase text-slate-700 mb-1">Best Case</label>
+                            <input id="best-case" type="text" value="${escapeAttr(d.bestCase)}" oninput="updateDraft('bestCase', this.value)" placeholder="e.g. Nobody even noticed, and the point landed fine." class="w-full p-3 rounded-xl border border-slate-300 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500">
+                        </div>
+                        <div>
+                            <label for="likely-case" class="block text-xs font-bold uppercase text-slate-700 mb-1">Most Likely Outcome (Based on Real Evidence)</label>
+                            <input id="likely-case" type="text" value="${escapeAttr(d.likelyCase)}" oninput="updateDraft('likelyCase', this.value)" placeholder="e.g. People are busy with their own work; a quick recap covers everything." class="w-full p-3 rounded-xl border border-slate-300 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500">
+                        </div>
+                    </div>
+                `;
+            } else if (state.step === 4) {
+                panel.innerHTML = `
+                    <h2 class="text-lg font-bold text-slate-900 mb-1">Step 4: Trade One More Loop for One Small Action</h2>
+                    <p class="text-slate-600 text-sm mb-5">Clarity usually shows up <em>after</em> you take a small step, not before. Pick something tiny and concrete you can do next.</p>
+
+                    <div class="mb-5">
+                        <label for="next-action" class="block text-xs font-bold uppercase text-slate-700 mb-1.5">My next small step (keep it doable in 10–15 minutes)</label>
+                        <input id="next-action" type="text" value="${escapeAttr(d.nextAction)}" oninput="updateDraft('nextAction', this.value)" placeholder="e.g. Send the 3-bullet recap email, close the tab, and get a glass of water." class="w-full p-3 rounded-xl border border-slate-300 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500">
+                    </div>
+
+                    <div class="bg-slate-900 text-white rounded-2xl p-5">
+                        <div class="text-xs font-bold uppercase tracking-wider text-indigo-300 mb-1.5">Quick Reset Summary</div>
+                        <p class="text-sm font-medium text-white mb-2">"${escapeHtml(d.thought.trim() || 'No thought typed yet—feel free to add one in Step 1.')}"</p>
+                        <p class="text-xs text-slate-300">Most likely reality: <span class="text-white font-semibold">${escapeHtml(d.likelyCase.trim() || 'Not filled in yet')}</span></p>
+                        <p class="text-xs text-slate-300 mt-1">Next action: <span class="text-emerald-300 font-semibold">${escapeHtml(d.nextAction.trim() || 'Not filled in yet')}</span></p>
+                    </div>
+                `;
+            }
+        }
+
+        // Update Back and Next / Start Fresh Draft buttons
+        function updateNavButtons() {
+            const prevBtn = document.getElementById('prev-btn');
+            const nextBtn = document.getElementById('next-btn');
+            if (!prevBtn || !nextBtn) return;
+
+            prevBtn.disabled = state.step === 1;
+
+            if (state.step === 4) {
+                nextBtn.innerText = 'Start Fresh Draft';
+                nextBtn.onclick = () => {
+                    state.draft = createEmptyDraft();
+                    state.step = 1;
+                    persist();
+                    render();
+                    showToast('Started a fresh Loop Breaker draft');
+                };
+            } else {
+                nextBtn.innerHTML = 'Next Step &rarr;';
+                nextBtn.onclick = () => changeStep(1);
+            }
+        }
+
+        // Save current draft into recent loop resets history
+        function saveCurrentLoop() {
+            const d = state.draft;
+            if (!d.thought.trim() && !d.nextAction.trim()) {
+                showToast('Add a thought or next action before saving');
+                return;
+            }
+            const labelMap = {
+                rumination: 'Past Replay',
+                worry: 'What-If Spiral',
+                paralysis: 'Decision Paralysis'
+            };
+            state.savedLoops.unshift({
+                id: Date.now(),
+                date: new Date().toLocaleDateString([], { month: 'short', day: 'numeric' }),
+                type: labelMap[d.loopType] || 'Loop',
+                thought: d.thought.trim() || '(Untitled loop)',
+                likelyCase: d.likelyCase.trim(),
+                nextAction: d.nextAction.trim()
+            });
+            state.savedLoops = state.savedLoops.slice(0, 15);
+            persist();
+            renderSavedLoops();
+            showToast('Loop reset saved');
+        }
+
+        // Clear all saved entries from state and localStorage
+        function clearSavedLoops() {
+            state.savedLoops = [];
+            persist();
+            renderSavedLoops();
+            showToast('Saved loop history cleared');
+        }
+
+        // Render saved loop resets list and counter
+        function renderSavedLoops() {
+            const list = document.getElementById('saved-loops-list');
+            const count = document.getElementById('saved-count');
+            if (!list || !count) return;
+
+            count.innerText = `${state.savedLoops.length} saved`;
+
+            if (!state.savedLoops.length) {
+                list.innerHTML = '<p class="text-xs text-slate-400">No entries saved yet. Complete a reset and hit "Save Entry" to keep track of patterns that trip you up.</p>';
+                return;
+            }
+
+            list.innerHTML = state.savedLoops.map(item => `
+                <div class="p-3.5 rounded-xl border border-slate-200 bg-slate-50/70">
+                    <div class="flex items-center justify-between text-[11px] font-semibold text-slate-500 mb-1">
+                        <span class="text-indigo-700 bg-indigo-50 px-2 py-0.5 rounded">${escapeHtml(item.type)}</span>
+                        <span>${escapeHtml(item.date)}</span>
+                    </div>
+                    <p class="text-xs font-semibold text-slate-800 break-words">${escapeHtml(item.thought)}</p>
+                    ${item.nextAction ? `<p class="text-[11px] text-emerald-700 mt-1.5 break-words">Next: ${escapeHtml(item.nextAction)}</p>` : ''}
+                </div>
+            `).join('');
+        }
+
+        // Escape HTML special characters for safe rendering
+        function escapeHtml(str) {
+            return String(str || '').replace(/[&<>"']/g, m => ({
+                '&': '&amp;',
+                '<': '&lt;',
+                '>': '&gt;',
+                '"': '&quot;',
+                "'": '&#39;'
+            }[m]));
+        }
+
+        // Escape strings used inside double-quoted HTML attributes
+        function escapeAttr(str) {
+            return escapeHtml(str);
+        }
+
+        // Timebox countdown timer logic (default 10:00)
+        let remainingSeconds = 10 * 60;
+        let timerInterval = null;
+
+        function formatTime(sec) {
+            const safeSec = Math.max(0, Number(sec) || 0);
+            const m = String(Math.floor(safeSec / 60)).padStart(2, '0');
+            const s = String(safeSec % 60).padStart(2, '0');
+            return `${m}:${s}`;
+        }
+
+        function syncTimerDisplay() {
+            const display = document.getElementById('timer-display');
+            if (display) display.innerText = formatTime(remainingSeconds);
+        }
+
+        function setTimerMinutes(mins) {
+            clearInterval(timerInterval);
+            timerInterval = null;
+            remainingSeconds = mins * 60;
+            const btn = document.getElementById('timer-toggle-btn');
+            const label = document.getElementById('timer-label');
+            if (btn) btn.innerText = 'Start';
+            if (label) label.innerText = `${mins}-minute window set`;
+            syncTimerDisplay();
+        }
+
+        function toggleTimer() {
+            const btn = document.getElementById('timer-toggle-btn');
+            const label = document.getElementById('timer-label');
+            if (!btn || !label) return;
+
+            if (timerInterval) {
+                clearInterval(timerInterval);
+                timerInterval = null;
+                btn.innerText = 'Resume';
+                label.innerText = 'Paused';
+            } else {
+                if (remainingSeconds <= 0) {
+                    remainingSeconds = 10 * 60;
+                }
+                btn.innerText = 'Pause';
+                label.innerText = 'Timeboxed window running...';
+                timerInterval = setInterval(() => {
+                    if (remainingSeconds > 0) {
+                        remainingSeconds--;
+                        syncTimerDisplay();
+                    } else {
+                        clearInterval(timerInterval);
+                        timerInterval = null;
+                        btn.innerText = 'Start';
+                        label.innerText = "Time's up — ready to shift gears";
+                        showToast('Timebox finished—time to step into action');
+                    }
+                }, 1000);
+            }
+        }
+
+        function resetTimer() {
+            setTimerMinutes(10);
+        }
+
+        // Render full UI
+        function render() {
+            renderTabs();
+            renderStep();
+            updateNavButtons();
+            renderSavedLoops();
+            syncTimerDisplay();
+        }
+
+        // Initialize application on load
+        render();
+    </script>
+</body>
+</html>
