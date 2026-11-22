@@ -2,200 +2,209 @@
 <html lang="en">
 <head>
     <!-- Google tag (gtag.js) -->
-    <script async src="https://www.googletagmanager.com/gtag/js?id=G-N17E2V3PX7"></script>
-    <script>
-      window.dataLayer = window.dataLayer || [];
-      function gtag(){dataLayer.push(arguments);}
-      gtag('js', new Date());
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-N17E2V3PX7"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
 
-      gtag('config', 'G-N17E2V3PX7');
-    </script>
-    <meta name="google-site-verification" content="Bzc-w8eidHholElEkPVUQ8AcpZfi7ept8q5N4PI5jyc" />
+  gtag('config', 'G-N17E2V3PX7');
+</script>
+<meta name="google-site-verification" content="Bzc-w8eidHholElEkPVUQ8AcpZfi7ept8q5N4PI5jyc" />
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>MindReset iCBT | Overthinking Reset & Social Anxiety</title>
-    <!-- Load Tailwind CSS for responsive utility styling -->
+    <title>MindReset iCBT | Overthinking Reset &amp; Social Anxiety</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <!-- Load Inter font family for crisp legibility -->
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-    <style>
-        body {
-            font-family: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-        }
-    </style>
 </head>
-<body class="bg-slate-50 text-slate-800 antialiased min-h-screen flex flex-col justify-between">
+<body class="bg-slate-50 text-slate-800 font-sans antialiased min-h-screen flex flex-col justify-between">
 
-    <!-- 1. Sticky Top Header -->
+    <!-- Header / Navbar -->
     <header class="bg-white border-b border-slate-200 sticky top-0 z-50">
-        <div class="max-w-5xl mx-auto px-4 sm:px-6 py-4 flex items-center justify-between gap-4">
+        <div class="max-w-5xl mx-auto px-6 py-4 flex items-center justify-between gap-4">
             <div class="flex items-center space-x-3">
                 <div class="w-9 h-9 rounded-xl bg-indigo-600 flex items-center justify-center text-white font-bold text-lg shadow-md shadow-indigo-200">i</div>
                 <span class="text-xl font-bold text-slate-900 tracking-tight">MindReset iCBT</span>
             </div>
             <div class="flex items-center gap-3">
-                <a href="app.html" onclick="handlePreviewNav(event, 'app.html', '8-Week Social Anxiety Roadmap')" class="hidden sm:inline-block border border-slate-300 hover:border-indigo-300 hover:bg-indigo-50/50 text-slate-700 hover:text-indigo-700 px-4 py-2.5 rounded-xl font-medium text-sm transition">
-                    8-Week Roadmap
-                </a>
-                <a href="overthinking.html" onclick="handlePreviewNav(event, 'overthinking.html', 'Overthinking Loop Breaker')" class="bg-indigo-600 hover:bg-indigo-700 text-white px-5 py-2.5 rounded-xl font-medium text-sm transition shadow-sm shadow-indigo-100">
+                <a href="overthinking.html" class="bg-indigo-600 hover:bg-indigo-700 text-white px-5 py-2.5 rounded-xl font-medium text-sm transition shadow-sm shadow-indigo-100">
                     Loop Breaker &rarr;
+                </a>
+                <a href="app.html" class="hidden sm:inline-block border border-slate-300 hover:border-indigo-300 hover:bg-indigo-50/50 text-slate-700 hover:text-indigo-700 px-4 py-2.5 rounded-xl font-medium text-sm transition">
+                    8-Week Roadmap
                 </a>
             </div>
         </div>
     </header>
 
-    <!-- Subtle Interactive Toast Feedback for Preview Sandbox -->
-    <div id="preview-toast" role="status" aria-live="polite" class="fixed bottom-5 right-5 z-50 transform translate-y-20 opacity-0 transition-all duration-300 pointer-events-none bg-slate-900 text-white text-xs font-medium px-4 py-3 rounded-xl shadow-xl border border-slate-700 flex items-center gap-2">
-        <span class="w-2 h-2 rounded-full bg-emerald-400"></span>
-        <span id="preview-toast-msg">Navigating...</span>
-    </div>
+    <!-- Main Content -->
+    <main class="max-w-4xl mx-auto px-6 py-12 flex-grow space-y-12">
 
-    <!-- Main Content Container -->
-    <main class="max-w-4xl mx-auto w-full px-4 sm:px-6 py-12 flex-grow">
-        
-        <!-- 2. Hero Section Leading with Overthinking -->
-        <section class="text-center mb-14">
+        <!-- Hero Section -->
+        <section class="text-center pt-2">
             <span class="inline-block bg-indigo-50 text-indigo-700 text-xs font-semibold px-3 py-1 rounded-full uppercase tracking-wider mb-4">Self-Guided CBT &middot; Private &amp; Local</span>
-            <h1 class="text-4xl sm:text-5xl font-extrabold text-slate-900 tracking-tight mb-6">
-                Quiet the Mental Noise. <br class="hidden sm:inline"> Step Back Into Your Life.
+            <h1 class="text-4xl sm:text-5xl font-extrabold text-slate-900 tracking-tight mb-5">
+                Break the Overthinking Loop. <br class="hidden sm:inline"> Move Forward With Clarity.
             </h1>
             <p class="text-lg text-slate-600 max-w-2xl mx-auto leading-relaxed mb-8">
-                Stuck replaying conversations, rehearsing &ldquo;what-ifs,&rdquo; or circling the same decision? Start with an immediate loop reset to untangle your thoughts—or explore our structured roadmap when social situations feel overwhelming.
+                A calm, self-guided toolkit designed to help you interrupt mental replays and &ldquo;what-if&rdquo; spirals first—with a separate 8-week structured roadmap for social anxiety below.
             </p>
-            <div class="flex flex-col items-center justify-center gap-3.5 max-w-md mx-auto">
-                <a href="overthinking.html" onclick="handlePreviewNav(event, 'overthinking.html', 'Overthinking Loop Breaker')" class="w-full bg-indigo-600 hover:bg-indigo-700 text-white font-semibold px-8 py-4 rounded-xl shadow-lg shadow-indigo-200 transition text-center text-base">
+            <div class="flex flex-col sm:flex-row items-center justify-center gap-4">
+                <a href="overthinking.html" class="w-full sm:w-auto bg-indigo-600 hover:bg-indigo-700 text-white font-semibold px-8 py-4 rounded-xl shadow-lg shadow-indigo-200 transition text-center text-base">
                     Open Overthinking Loop Breaker &rarr;
                 </a>
-                <a href="app.html" onclick="handlePreviewNav(event, 'app.html', '8-Week Social Anxiety Roadmap')" class="w-full bg-white hover:bg-slate-50 text-slate-700 hover:text-slate-900 border border-slate-300 font-semibold px-8 py-3.5 rounded-xl transition text-center text-sm">
-                    Explore 8-Week Social Anxiety Roadmap
+                <a href="app.html" class="w-full sm:w-auto bg-white hover:bg-slate-50 text-slate-800 border border-slate-300 font-semibold px-8 py-4 rounded-xl transition text-center text-base">
+                    Go to Social Anxiety Roadmap
                 </a>
             </div>
         </section>
 
-        <!-- 3. Two Completely Separate, Stacked Vertical Sections -->
-        <div class="space-y-10 mb-14">
-
-            <!-- TOP SECTION: Dedicated to Overthinking Loop Breaker -->
-            <section aria-labelledby="overthinking-heading" class="w-full bg-white rounded-2xl border-2 border-indigo-200 p-6 sm:p-8 shadow-sm">
-                <div class="flex flex-wrap items-center justify-between gap-2 mb-3">
-                    <span class="text-xs font-bold uppercase tracking-wider text-emerald-700 bg-emerald-50 border border-emerald-200 px-3 py-1 rounded-full">In-the-Moment Reset</span>
-                    <span class="text-xs font-semibold text-indigo-600">5&ndash;10 Min Interactive Reset</span>
-                </div>
-                <h2 id="overthinking-heading" class="text-2xl sm:text-3xl font-bold text-slate-900 mb-3">Overthinking Loop Breaker</h2>
-                <p class="text-slate-600 text-sm sm:text-base leading-relaxed mb-6">
-                    Built for late-night replays, future &ldquo;what-if&rdquo; spirals, and decision paralysis. Instead of chewing on the same thought expecting a different answer, this tool helps you interrupt the spin and move back into real life.
-                </p>
-
-                <!-- Dedicated 3-Card Breakdown for Overthinking Loop Breaker -->
-                <div class="grid sm:grid-cols-3 gap-4 mb-7">
-                    <div class="bg-slate-50 p-5 rounded-xl border border-slate-100">
-                        <div class="text-indigo-600 font-bold text-base mb-1.5">1. Catch &amp; Name the Loop</div>
-                        <p class="text-sm text-slate-600 leading-relaxed">Put words on what is spinning and classify whether it is a Past Replay, a &ldquo;What-If&rdquo; Spiral, or Decision Paralysis.</p>
-                    </div>
-                    <div class="bg-slate-50 p-5 rounded-xl border border-slate-100">
-                        <div class="text-indigo-600 font-bold text-base mb-1.5">2. Check Control &amp; Reality</div>
-                        <p class="text-sm text-slate-600 leading-relaxed">Separate what is actionable from what is out of your hands, park extra worries, and compare worst, best, and most likely outcomes.</p>
-                    </div>
-                    <div class="bg-slate-50 p-5 rounded-xl border border-slate-100">
-                        <div class="text-indigo-600 font-bold text-base mb-1.5">3. Timebox &amp; Take Action</div>
-                        <p class="text-sm text-slate-600 leading-relaxed">Use a 5, 10, or 15-minute boundary timer to close the mental tab and commit to one concrete, doable next step.</p>
-                    </div>
-                </div>
-
-                <div>
-                    <a href="overthinking.html" onclick="handlePreviewNav(event, 'overthinking.html', 'Overthinking Loop Breaker')" class="inline-flex items-center justify-center bg-indigo-600 hover:bg-indigo-700 text-white font-semibold px-6 py-3.5 rounded-xl text-sm transition shadow-sm">
-                        Launch Overthinking Loop Breaker &rarr;
-                    </a>
-                </div>
-            </section>
-
-            <!-- BOTTOM SECTION: Dedicated to 8-Week Social Anxiety Roadmap -->
-            <section aria-labelledby="social-anxiety-heading" class="w-full bg-white rounded-2xl border border-slate-200 p-6 sm:p-8 shadow-sm">
-                <div class="flex flex-wrap items-center justify-between gap-2 mb-3">
-                    <span class="text-xs font-bold uppercase tracking-wider text-indigo-700 bg-indigo-50 border border-indigo-100 px-3 py-1 rounded-full">Structured Progression</span>
-                    <span class="text-xs font-medium text-slate-500">8 Self-Paced Weekly Modules</span>
-                </div>
-                <h2 id="social-anxiety-heading" class="text-2xl sm:text-3xl font-bold text-slate-900 mb-3">8-Week Social Anxiety Roadmap</h2>
-                <p class="text-slate-600 text-sm sm:text-base leading-relaxed mb-6">
-                    A structured, self-guided iCBT workbook designed for fear of scrutiny, negative evaluation, and social avoidance. Work steadily through unlocked weekly sessions to challenge anxious predictions and drop safety behaviors.
-                </p>
-
-                <!-- Dedicated 3-Card Breakdown for 8-Week Social Anxiety Roadmap -->
-                <div class="grid sm:grid-cols-3 gap-4 mb-7">
-                    <div class="bg-slate-50 p-5 rounded-xl border border-slate-100">
-                        <div class="text-indigo-600 font-bold text-base mb-1.5">1. Weekly Check-in &amp; Mapping</div>
-                        <p class="text-sm text-slate-600 leading-relaxed">Track your baseline distress across social scenarios and map the specific triggers and physical responses that keep anxiety active.</p>
-                    </div>
-                    <div class="bg-slate-50 p-5 rounded-xl border border-slate-100">
-                        <div class="text-indigo-600 font-bold text-base mb-1.5">2. Thought Restructuring</div>
-                        <p class="text-sm text-slate-600 leading-relaxed">Spot cognitive traps like mind reading and catastrophizing, then weigh objective evidence for and against automatic thoughts.</p>
-                    </div>
-                    <div class="bg-slate-50 p-5 rounded-xl border border-slate-100">
-                        <div class="text-indigo-600 font-bold text-base mb-1.5">3. Gradual Real-World Experiments</div>
-                        <p class="text-sm text-slate-600 leading-relaxed">Build a SUDs exposure ladder, drop hidden safety shields, and test feared social situations step by step at your own pace.</p>
-                    </div>
-                </div>
-
-                <div>
-                    <a href="app.html" onclick="handlePreviewNav(event, 'app.html', '8-Week Social Anxiety Roadmap')" class="inline-flex items-center justify-center bg-slate-900 hover:bg-slate-800 text-white font-semibold px-6 py-3.5 rounded-xl text-sm transition">
-                        Launch 8-Week Social Anxiety Roadmap &rarr;
-                    </a>
-                </div>
-            </section>
-
-        </div>
-
-        <!-- 4. Bottom Dark Indigo Callout Banner -->
-        <section class="bg-indigo-900 text-white rounded-3xl p-8 sm:p-10 text-center shadow-xl">
-            <h2 class="text-2xl sm:text-3xl font-bold mb-4">Ready to clear your headspace?</h2>
-            <p class="text-indigo-200 max-w-xl mx-auto mb-8 text-sm sm:text-base leading-relaxed">
-                Untangle a spinning thought in a few minutes, or work steadily through the weekly roadmap. Everything stays saved locally on your device.
-            </p>
-            <div class="flex flex-col items-center justify-center gap-3.5 max-w-md mx-auto">
-                <a href="overthinking.html" onclick="handlePreviewNav(event, 'overthinking.html', 'Overthinking Loop Breaker')" class="w-full inline-block bg-white text-indigo-900 hover:bg-indigo-50 font-bold px-8 py-4 rounded-xl transition shadow-md">
-                    Open Loop Breaker &rarr;
-                </a>
-                <a href="app.html" onclick="handlePreviewNav(event, 'app.html', '8-Week Social Anxiety Roadmap')" class="w-full inline-block bg-indigo-800 hover:bg-indigo-700 text-white border border-indigo-600 font-bold px-8 py-3.5 rounded-xl transition">
-                    Launch 8-Week Roadmap
-                </a>
+        <!-- Primary Section: Overthinking Loop Breaker -->
+        <section class="bg-white rounded-2xl border border-slate-200 p-8 shadow-sm">
+            <div class="flex flex-wrap items-center justify-between gap-2 mb-3">
+                <span class="text-xs font-bold uppercase tracking-wider text-indigo-700 bg-indigo-50 px-3 py-1 rounded-full">Primary Tool &middot; Overthinking Reset</span>
+                <span class="text-xs font-semibold text-slate-500">4-Step Flow &amp; Timebox Timer</span>
             </div>
+            <h2 class="text-2xl font-bold text-slate-900 mb-3">Overthinking Loop Breaker</h2>
+            <p class="text-slate-600 leading-relaxed mb-6">
+                Thinking deeply is useful until your mind starts replaying past moments, spiraling into &ldquo;what-ifs,&rdquo; or stalling on decisions. This tool helps you catch the loop, check what is actually in your control, weigh realistic outcomes, and timebox one small next action.
+            </p>
+            <div class="grid sm:grid-cols-3 gap-5 mb-7">
+                <div class="bg-slate-50 p-5 rounded-xl border border-slate-100">
+                    <div class="text-indigo-600 font-bold text-base mb-1">1. Name the Loop</div>
+                    <p class="text-sm text-slate-600">Spot whether you&apos;re stuck in a past replay, a &ldquo;what-if&rdquo; spiral, or decision paralysis.</p>
+                </div>
+                <div class="bg-slate-50 p-5 rounded-xl border border-slate-100">
+                    <div class="text-indigo-600 font-bold text-base mb-1">2. Control Check</div>
+                    <p class="text-sm text-slate-600">Separate steps you can take today from outcomes outside your control and park extra worries.</p>
+                </div>
+                <div class="bg-slate-50 p-5 rounded-xl border border-slate-100">
+                    <div class="text-indigo-600 font-bold text-base mb-1">3. Reality &amp; Timebox</div>
+                    <p class="text-sm text-slate-600">Compare worst, best, and most likely outcomes, set a timer, and move to a small action.</p>
+                </div>
+            </div>
+            <a href="overthinking.html" class="inline-flex items-center justify-center bg-indigo-600 hover:bg-indigo-700 text-white font-semibold px-6 py-3 rounded-xl text-sm transition shadow-sm">
+                Start Overthinking Loop Breaker &rarr;
+            </a>
+        </section>
+
+        <!-- Secondary Section: 8-Week Social Anxiety Roadmap -->
+        <section class="bg-white rounded-2xl border border-slate-200 p-8 shadow-sm">
+            <div class="flex flex-wrap items-center justify-between gap-2 mb-3">
+                <span class="text-xs font-bold uppercase tracking-wider text-indigo-700 bg-indigo-50 px-3 py-1 rounded-full">Structured Program &middot; Social Anxiety</span>
+                <span class="text-xs font-semibold text-slate-500">8 Paced Weeks</span>
+            </div>
+            <h2 class="text-2xl font-bold text-slate-900 mb-3">8-Week Social Anxiety Roadmap</h2>
+            <p class="text-slate-600 leading-relaxed mb-6">
+                Designed for fear of social scrutiny, judgment, or avoidance in everyday interactions. Each week guides you through a check-in, psychoeducation and trigger mapping, thought restructuring, and gradual real-world experiments.
+            </p>
+            <div class="grid sm:grid-cols-3 gap-5 mb-7">
+                <div class="bg-slate-50 p-5 rounded-xl border border-slate-100">
+                    <div class="text-indigo-600 font-bold text-base mb-1">Check-Ins &amp; Triggers</div>
+                    <p class="text-sm text-slate-600">Track weekly distress levels and map out situations that trigger anticipation or avoidance.</p>
+                </div>
+                <div class="bg-slate-50 p-5 rounded-xl border border-slate-100">
+                    <div class="text-indigo-600 font-bold text-base mb-1">Thought Restructuring</div>
+                    <p class="text-sm text-slate-600">Challenge assumptions like mind reading or catastrophizing with grounded reframes.</p>
+                </div>
+                <div class="bg-slate-50 p-5 rounded-xl border border-slate-100">
+                    <div class="text-indigo-600 font-bold text-base mb-1">Gradual Experiments</div>
+                    <p class="text-sm text-slate-600">Practice small, step-by-step social experiments at your own pace.</p>
+                </div>
+            </div>
+            <a href="app.html" class="inline-flex items-center justify-center bg-indigo-600 hover:bg-indigo-700 text-white font-semibold px-6 py-3 rounded-xl text-sm transition shadow-sm">
+                Launch 8-Week Social Anxiety Roadmap &rarr;
+            </a>
+        </section>
+
+        <!-- Feedback Section Above Footer -->
+        <section class="bg-white rounded-2xl border border-slate-200 p-8 shadow-sm">
+            <h2 class="text-xl font-bold text-slate-900 mb-1">Share Feedback</h2>
+            <p class="text-sm text-slate-600 mb-5">Have a suggestion or idea to improve these tools? Send a quick note to <span class="font-semibold text-slate-800">feedback@theinnerscale.com</span>.</p>
+
+            <form id="feedback-form" onsubmit="handleFeedbackSubmit(event)" class="space-y-4">
+                <div>
+                    <label class="block text-xs font-bold uppercase text-slate-700 mb-2">How does this feel so far?</label>
+                    <div class="flex flex-wrap gap-2.5" id="rating-options">
+                        <button type="button" data-rating="Helpful" onclick="selectRating('Helpful')" class="rating-btn px-4 py-2 rounded-xl border border-indigo-600 bg-indigo-50 text-indigo-700 text-xs font-bold transition">Helpful</button>
+                        <button type="button" data-rating="Needs Work" onclick="selectRating('Needs Work')" class="rating-btn px-4 py-2 rounded-xl border border-slate-200 bg-slate-50 text-slate-700 hover:bg-slate-100 text-xs font-bold transition">Needs Work</button>
+                        <button type="button" data-rating="Confusing" onclick="selectRating('Confusing')" class="rating-btn px-4 py-2 rounded-xl border border-slate-200 bg-slate-50 text-slate-700 hover:bg-slate-100 text-xs font-bold transition">Confusing</button>
+                    </div>
+                </div>
+
+                <div>
+                    <label for="feedback-note" class="block text-xs font-bold uppercase text-slate-700 mb-1.5">Your Note (Optional)</label>
+                    <textarea id="feedback-note" rows="3" placeholder="Tell us what helped, what felt unclear, or what feature would make this more useful..." class="w-full p-3 rounded-xl border border-slate-300 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500"></textarea>
+                </div>
+
+                <div class="flex flex-wrap items-center justify-between gap-3 pt-1">
+                    <button type="submit" class="inline-flex items-center justify-center bg-indigo-600 hover:bg-indigo-700 text-white font-semibold px-6 py-3 rounded-xl text-sm transition shadow-sm">
+                        Send Feedback &rarr;
+                    </button>
+                    <a id="direct-mailto-link" href="mailto:feedback@theinnerscale.com?subject=Feedback%20on%20MindReset%20iCBT" class="text-xs font-medium text-indigo-600 hover:text-indigo-800 underline">
+                        Open mail client directly
+                    </a>
+                </div>
+            </form>
+
+            <div id="feedback-status" class="hidden mt-4 p-4 rounded-xl bg-indigo-50 border border-indigo-100 text-xs text-indigo-900"></div>
         </section>
 
     </main>
 
     <!-- Footer -->
-    <footer class="border-t border-slate-200 bg-white py-6 text-center text-xs text-slate-500 px-4">
-        <p>MindReset iCBT Toolkit &bull; Self-guided tools built for privacy and personal growth.</p>
+    <footer class="border-t border-slate-200 bg-white py-6 text-center text-xs text-slate-500">
+        <p>Self-Guided iCBT Toolkit &bull; All progress stays local on your device.</p>
     </footer>
 
     <script>
-        // Provide non-disruptive toast feedback in sandboxed preview environments where sibling files aren't hosted
-        let toastTimer = null;
-        function handlePreviewNav(event, targetFile, label) {
-            try {
-                const isSandboxed = window.location.protocol === 'about:' ||
-                                    window.location.protocol === 'blob:' ||
-                                    window.location.protocol === 'data:' ||
-                                    window.self !== window.top;
-                if (isSandboxed) {
-                    event.preventDefault();
-                    const toast = document.getElementById('preview-toast');
-                    const msg = document.getElementById('preview-toast-msg');
-                    if (toast && msg) {
-                        msg.textContent = `Links to ${targetFile} (${label})`;
-                        toast.classList.remove('translate-y-20', 'opacity-0');
-                        if (toastTimer) clearTimeout(toastTimer);
-                        toastTimer = setTimeout(() => {
-                            toast.classList.add('translate-y-20', 'opacity-0');
-                        }, 2800);
-                    }
-                }
-            } catch (err) {
-                event.preventDefault();
+        let selectedRating = 'Helpful';
+
+        function selectRating(rating) {
+            selectedRating = rating;
+            document.querySelectorAll('.rating-btn').forEach(btn => {
+                const isSelected = btn.getAttribute('data-rating') === rating;
+                btn.className = isSelected
+                    ? 'rating-btn px-4 py-2 rounded-xl border border-indigo-600 bg-indigo-50 text-indigo-700 text-xs font-bold transition'
+                    : 'rating-btn px-4 py-2 rounded-xl border border-slate-200 bg-slate-50 text-slate-700 hover:bg-slate-100 text-xs font-bold transition';
+            });
+            syncDirectMailto();
+        }
+
+        function buildMailtoUrl() {
+            const note = document.getElementById('feedback-note').value.trim();
+            const subject = encodeURIComponent(`MindReset iCBT Feedback (${selectedRating})`);
+            const bodyLines = [
+                'Hi InnerScale team,',
+                '',
+                `Rating: ${selectedRating}`,
+                `Comment: ${note || '(No additional comment provided)'}`,
+                `Page: ${window.location.href}`
+            ];
+            const body = encodeURIComponent(bodyLines.join('\n'));
+            return `mailto:feedback@theinnerscale.com?subject=${subject}&body=${body}`;
+        }
+
+        function syncDirectMailto() {
+            const link = document.getElementById('direct-mailto-link');
+            if (link) {
+                link.href = buildMailtoUrl();
             }
         }
+
+        function handleFeedbackSubmit(event) {
+            event.preventDefault();
+            const mailtoUrl = buildMailtoUrl();
+            syncDirectMailto();
+
+            const statusEl = document.getElementById('feedback-status');
+            statusEl.classList.remove('hidden');
+            statusEl.innerHTML = `Opening your email app to <strong>feedback@theinnerscale.com</strong>. If nothing opens automatically, use <a href="${mailtoUrl}" class="underline font-semibold">this mail link</a>.`;
+
+            window.location.href = mailtoUrl;
+        }
+
+        document.getElementById('feedback-note').addEventListener('input', syncDirectMailto);
+        syncDirectMailto();
     </script>
 
 </body>
