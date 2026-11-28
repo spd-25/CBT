@@ -1,0 +1,754 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Daily Mental Health Checklist & Trends | theinnerscale</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.3/dist/chart.umd.min.js"></script>
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-76L92N1Z4V"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-76L92N1Z4V');
+  </script>
+  <style>
+    details > summary { list-style: none; }
+    details > summary::-webkit-details-marker { display: none; }
+    details[open] .accordion-chevron { transform: rotate(180deg); }
+  </style>
+</head>
+<body class="bg-slate-50 text-slate-800 antialiased selection:bg-indigo-100 selection:text-indigo-900">
+  <!-- Header -->
+  <header class="sticky top-0 z-30 bg-white/95 backdrop-blur border-b border-slate-200">
+    <div class="max-w-5xl mx-auto px-4 sm:px-6 h-16 flex items-center justify-between gap-4">
+      <div class="flex items-center gap-4">
+        <a href="index.html" class="flex items-center gap-2 font-semibold text-slate-900 text-lg tracking-tight">
+          <span class="w-2.5 h-2.5 rounded-full bg-indigo-600"></span>
+          <span>theinnerscale</span>
+        </a>
+        <span class="hidden sm:inline text-slate-300">/</span>
+        <span class="hidden sm:inline text-sm font-medium text-slate-600">Daily Mental Health Checklist</span>
+      </div>
+      <nav class="flex items-center gap-2 sm:gap-4 text-sm font-medium">
+        <a href="index.html" class="text-slate-600 hover:text-indigo-600 transition">Home</a>
+        <a href="overthinking.html" class="text-slate-600 hover:text-indigo-600 transition">Stop Overthinking</a>
+        <a href="app.html" class="hidden md:inline-block text-slate-600 hover:text-indigo-600 transition">8-Week Roadmap</a>
+      </nav>
+    </div>
+  </header>
+
+  <main class="max-w-5xl mx-auto px-4 sm:px-6 py-8 space-y-6">
+    <!-- Top Controls & View Switcher -->
+    <section class="bg-white border border-slate-200 rounded-2xl p-5 sm:p-6 shadow-sm">
+      <div class="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4">
+        <div>
+          <h1 class="text-2xl font-bold text-slate-900">Daily Mental Health Checklist</h1>
+          <p class="mt-1 text-sm text-slate-600">
+            Select a date to check off daily habits, or switch to Trends to inspect your completion history.
+          </p>
+        </div>
+
+        <!-- View Mode Tabs -->
+        <div class="inline-flex rounded-xl bg-slate-100 p-1 border border-slate-200 self-start lg:self-auto">
+          <button id="tab-checklist" type="button" onclick="switchView('checklist')" class="px-4 py-2 rounded-lg text-sm font-semibold bg-white text-indigo-700 shadow-sm transition">
+            Daily Checklist
+          </button>
+          <button id="tab-trends" type="button" onclick="switchView('trends')" class="px-4 py-2 rounded-lg text-sm font-semibold text-slate-600 hover:text-slate-900 transition">
+            View Trends &rarr;
+          </button>
+        </div>
+      </div>
+
+      <!-- Date Navigation Bar & Backup Controls -->
+      <div class="mt-5 pt-5 border-t border-slate-100 flex flex-col md:flex-row md:items-center md:justify-between gap-4">
+        <div class="flex flex-wrap items-center gap-2">
+          <button type="button" onclick="stepDate(-1)" class="px-3 py-2 rounded-lg border border-slate-300 bg-white hover:bg-slate-50 text-sm font-medium text-slate-700 transition">
+            &larr; Prev
+          </button>
+          <input id="date-picker" type="date" onchange="handleDateInput(this.value)" class="px-3 py-2 rounded-lg border border-slate-300 bg-white text-sm font-medium text-slate-800 focus:border-indigo-500 focus:outline-none" />
+          <button type="button" onclick="stepDate(1)" class="px-3 py-2 rounded-lg border border-slate-300 bg-white hover:bg-slate-50 text-sm font-medium text-slate-700 transition">
+            Next &rarr;
+          </button>
+          <button type="button" onclick="jumpToToday()" class="px-3 py-2 rounded-lg bg-indigo-50 hover:bg-indigo-100 text-indigo-700 border border-indigo-200 text-sm font-semibold transition">
+            Today
+          </button>
+          <span id="save-status" class="ml-1 text-xs font-medium text-emerald-700 bg-emerald-50 border border-emerald-200 px-2.5 py-1 rounded-full">
+            Auto-save ready
+          </span>
+        </div>
+
+        <div class="flex flex-wrap items-center gap-2 text-xs font-semibold">
+          <button type="button" onclick="setAllAccordions(true)" class="px-3 py-1.5 rounded-lg border border-slate-200 bg-slate-50 hover:bg-slate-100 text-slate-700 transition">
+            Expand All
+          </button>
+          <button type="button" onclick="setAllAccordions(false)" class="px-3 py-1.5 rounded-lg border border-slate-200 bg-slate-50 hover:bg-slate-100 text-slate-700 transition">
+            Collapse All
+          </button>
+          <button type="button" onclick="exportChecklistJson()" class="px-3 py-1.5 rounded-lg border border-slate-300 bg-white hover:bg-slate-50 text-slate-700 transition">
+            Export JSON
+          </button>
+          <label class="px-3 py-1.5 rounded-lg border border-slate-300 bg-white hover:bg-slate-50 text-slate-700 cursor-pointer transition">
+            Import JSON
+            <input type="file" accept="application/json" onchange="importChecklistJson(event)" class="hidden" />
+          </label>
+        </div>
+      </div>
+
+      <!-- Daily Progress Summary -->
+      <div class="mt-5 bg-slate-50 border border-slate-200/80 rounded-xl p-4">
+        <div class="flex items-center justify-between text-sm font-semibold text-slate-800 mb-2">
+          <span id="active-date-label">Loading date...</span>
+          <span id="completion-summary">0 / 16 Done (0%)</span>
+        </div>
+        <div class="w-full h-2.5 bg-slate-200 rounded-full overflow-hidden">
+          <div id="completion-bar" class="h-full bg-indigo-600 rounded-full transition-all duration-300" style="width: 0%"></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- VIEW 1: DAILY CHECKLIST ACCORDIONS -->
+    <section id="view-checklist" class="space-y-4">
+      <div id="categories-container" class="space-y-4"></div>
+    </section>
+
+    <!-- VIEW 2: TRENDS & ANALYTICS (REAL DATA ONLY) -->
+    <section id="view-trends" class="hidden space-y-6">
+      <div id="trends-empty-state" class="hidden bg-white border border-slate-200 rounded-2xl p-8 text-center shadow-sm">
+        <h2 class="text-lg font-bold text-slate-900">No checklist entries recorded yet</h2>
+        <p class="mt-1.5 text-sm text-slate-600 max-w-md mx-auto">
+          Check off habits on the Daily Checklist tab to populate your 14-day completion trend, category balance, and habit consistency summary.
+        </p>
+        <button type="button" onclick="switchView('checklist')" class="mt-4 inline-flex items-center px-4 py-2 rounded-xl bg-indigo-600 hover:bg-indigo-700 text-white text-sm font-semibold transition">
+          &larr; Go to Daily Checklist
+        </button>
+      </div>
+
+      <div id="trends-content" class="space-y-6">
+        <!-- Stat Cards -->
+        <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+          <div class="bg-white border border-slate-200 rounded-2xl p-5 shadow-sm">
+            <p class="text-xs font-semibold uppercase tracking-wider text-slate-500">Logged Days</p>
+            <p id="stat-logged-days" class="mt-2 text-2xl font-bold text-slate-900">0</p>
+            <p class="mt-1 text-xs text-slate-500">Dates with at least one habit checked</p>
+          </div>
+          <div class="bg-white border border-slate-200 rounded-2xl p-5 shadow-sm">
+            <p class="text-xs font-semibold uppercase tracking-wider text-slate-500">14-Day Average</p>
+            <p id="stat-14d-avg" class="mt-2 text-2xl font-bold text-indigo-600">0%</p>
+            <p class="mt-1 text-xs text-slate-500">Across the last 14 calendar days</p>
+          </div>
+          <div class="bg-white border border-slate-200 rounded-2xl p-5 shadow-sm">
+            <p class="text-xs font-semibold uppercase tracking-wider text-slate-500">Total Habits Completed</p>
+            <p id="stat-total-checks" class="mt-2 text-2xl font-bold text-slate-900">0</p>
+            <p class="mt-1 text-xs text-slate-500">Cumulative check-offs across all dates</p>
+          </div>
+        </div>
+
+        <!-- Charts Grid -->
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+          <div class="bg-white border border-slate-200 rounded-2xl p-5 sm:p-6 shadow-sm">
+            <h2 class="text-base font-bold text-slate-900">14-Day Completion (%) &amp; 3-Day Trend</h2>
+            <p class="text-xs text-slate-500 mt-0.5 mb-4">Daily percentage of the 16 habits completed</p>
+            <div class="relative h-64">
+              <canvas id="completionTrendChart"></canvas>
+            </div>
+          </div>
+
+          <div class="bg-white border border-slate-200 rounded-2xl p-5 sm:p-6 shadow-sm">
+            <h2 class="text-base font-bold text-slate-900">14-Day Category Balance (%)</h2>
+            <p class="text-xs text-slate-500 mt-0.5 mb-4">Average completion rate by habit category</p>
+            <div class="relative h-64">
+              <canvas id="categoryBalanceChart"></canvas>
+            </div>
+          </div>
+        </div>
+
+        <!-- Habit Consistency Breakdown -->
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <div class="bg-white border border-slate-200 rounded-2xl p-5 sm:p-6 shadow-sm">
+            <h3 class="text-sm font-bold uppercase tracking-wider text-emerald-700 mb-3">Most Consistent (Last 14 Days)</h3>
+            <ul id="most-consistent-list" class="space-y-2.5 text-sm"></ul>
+          </div>
+          <div class="bg-white border border-slate-200 rounded-2xl p-5 sm:p-6 shadow-sm">
+            <h3 class="text-sm font-bold uppercase tracking-wider text-amber-700 mb-3">Most Frequently Skipped (Last 14 Days)</h3>
+            <ul id="most-skipped-list" class="space-y-2.5 text-sm"></ul>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <script>
+    const CHECKLIST_DATA = {
+      "categories": [
+        "Body & Energy",
+        "Mind & Focus",
+        "Connection & Joy"
+      ],
+      "items": [
+        {
+          "id": "1",
+          "label": "Sleep 7–9 hours on a consistent schedule",
+          "sublines": [
+            "Same wake-up and bedtime daily to protect mood and emotional resilience"
+          ],
+          "category": "Body & Energy",
+          "checked": false
+        },
+        {
+          "id": "2",
+          "label": "Do a 5-minute morning stretch",
+          "sublines": [
+            "Simple neck, shoulder, and back stretches to shake off sleep stiffness"
+          ],
+          "category": "Body & Energy",
+          "checked": false
+        },
+        {
+          "id": "3",
+          "label": "Exercise for 20–30 minutes",
+          "sublines": [
+            "Brisk walk, cycle, lift weights, or run to boost endorphins"
+          ],
+          "category": "Body & Energy",
+          "checked": false
+        },
+        {
+          "id": "4",
+          "label": "Eat at least 1 meal with ~20–30g of protein",
+          "sublines": [
+            "3–4 eggs, ~100–130g paneer, ~150–200g tofu, ~100g chicken/fish, or ~200g Greek yogurt/curd"
+          ],
+          "category": "Body & Energy",
+          "checked": false
+        },
+        {
+          "id": "5",
+          "label": "Eat at least 2 servings of whole fruits or vegetables",
+          "sublines": [
+            "1 small bowl (~100–150g) side salad/sabzi, plus an apple (with skin) or berries"
+          ],
+          "category": "Body & Energy",
+          "checked": false
+        },
+        {
+          "id": "6",
+          "label": "Drink ~2.5 liters of water",
+          "sublines": [
+            "Accounts for baseline hydration plus fluid lost during a 20–30 minute workout"
+          ],
+          "category": "Body & Energy",
+          "checked": false
+        },
+        {
+          "id": "7",
+          "label": "Avoid checking or watching your phone right after waking up",
+          "sublines": [
+            "Leave your phone alone until after your morning routine starts"
+          ],
+          "category": "Mind & Focus",
+          "checked": false
+        },
+        {
+          "id": "8",
+          "label": "Do a 2-minute desk and distraction reset before focusing",
+          "sublines": [
+            "Move distracting items/clutter out of your main sightline, close extra tabs, and place your phone out of reach"
+          ],
+          "category": "Mind & Focus",
+          "checked": false
+        },
+        {
+          "id": "9",
+          "label": "Do 45–60 minutes of single-task focused work",
+          "sublines": [
+            "Silence notifications and focus on one task or personal project without tab-switching"
+          ],
+          "category": "Mind & Focus",
+          "checked": false
+        },
+        {
+          "id": "10",
+          "label": "Notice body rocking and ground feet flat while seated",
+          "sublines": [
+            "Plant both feet firmly on the floor and relax shoulders—or use a quiet foot/hand cue if restless"
+          ],
+          "category": "Mind & Focus",
+          "checked": false
+        },
+        {
+          "id": "11",
+          "label": "Do slow breathing (4s in, 6s out) right after getting home and changing",
+          "sublines": [
+            "Take 2–5 minutes before grabbing your phone to drop your shoulders and unwind from the commute"
+          ],
+          "category": "Mind & Focus",
+          "checked": false
+        },
+        {
+          "id": "12",
+          "label": "Have one screen-free meal for at least 20 minutes",
+          "sublines": [
+            "Gives your eyes and mind a midday screen break while supporting mindful eating"
+          ],
+          "category": "Mind & Focus",
+          "checked": false
+        },
+        {
+          "id": "13",
+          "label": "Write 1 thing that went well—or 1 fair reframe—before bed",
+          "sublines": [
+            "Writing is ideal for clarity and reflection; saying it out loud clearly works when short on time"
+          ],
+          "category": "Mind & Focus",
+          "checked": false
+        },
+        {
+          "id": "14",
+          "label": "Have one real, present conversation",
+          "sublines": [
+            "Talk face-to-face or by voice with a friend, family member, or colleague without multitasking"
+          ],
+          "category": "Connection & Joy",
+          "checked": false
+        },
+        {
+          "id": "15",
+          "label": "Spend 15–20 minutes on one screen-free hobby or relaxing activity",
+          "sublines": [
+            "Paint, read a book, listen to music, or sit with tea—zero productivity goal attached"
+          ],
+          "category": "Connection & Joy",
+          "checked": false
+        },
+        {
+          "id": "16",
+          "label": "Put screens away 30 minutes before bed and dim the lights",
+          "sublines": [
+            "Park your phone on charge, do your skincare/wash up, and unwind with gentle stretching"
+          ],
+          "category": "Connection & Joy",
+          "checked": false
+        }
+      ]
+    };
+
+    const STORAGE_KEY = 'innerscale_daily_checklist_v1';
+
+    function getLocalDateString(date = new Date()) {
+      const year = date.getFullYear();
+      const month = String(date.getMonth() + 1).padStart(2, '0');
+      const day = String(date.getDate()).padStart(2, '0');
+      return `${year}-${month}-${day}`;
+    }
+
+    function shiftDateString(dateStr, deltaDays) {
+      const [y, m, d] = dateStr.split('-').map(Number);
+      const dt = new Date(y, m - 1, d + deltaDays);
+      return getLocalDateString(dt);
+    }
+
+    function formatReadableDate(dateStr) {
+      const [y, m, d] = dateStr.split('-').map(Number);
+      const dt = new Date(y, m - 1, d);
+      const todayStr = getLocalDateString();
+      const suffix = dateStr === todayStr ? ' (Today)' : '';
+      return dt.toLocaleDateString(undefined, { weekday: 'short', month: 'short', day: 'numeric', year: 'numeric' }) + suffix;
+    }
+
+    function loadAllData() {
+      try {
+        const raw = localStorage.getItem(STORAGE_KEY);
+        const parsed = raw ? JSON.parse(raw) : {};
+        return parsed && typeof parsed === 'object' ? parsed : {};
+      } catch {
+        return {};
+      }
+    }
+
+    function saveDayCheckedIds(dateKey, checkedIds) {
+      const allData = loadAllData();
+      allData[dateKey] = Array.from(new Set(checkedIds));
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(allData));
+      const statusEl = document.getElementById('save-status');
+      if (statusEl) {
+        const now = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', second: '2-digit' });
+        statusEl.textContent = `Saved at ${now}`;
+      }
+    }
+
+    let lastKnownToday = getLocalDateString();
+    let activeDate = lastKnownToday;
+    let trendChartInstance = null;
+    let categoryChartInstance = null;
+
+    function getCheckedSetForDate(dateKey) {
+      const allData = loadAllData();
+      const list = Array.isArray(allData[dateKey]) ? allData[dateKey] : [];
+      return new Set(list);
+    }
+
+    function toggleItem(itemId) {
+      const checkedSet = getCheckedSetForDate(activeDate);
+      if (checkedSet.has(itemId)) {
+        checkedSet.delete(itemId);
+      } else {
+        checkedSet.add(itemId);
+      }
+      saveDayCheckedIds(activeDate, Array.from(checkedSet));
+      updateProgressHeader(checkedSet);
+      updateCategoryBadges(checkedSet);
+      if (!document.getElementById('view-trends')?.classList.contains('hidden')) {
+        renderTrends();
+      }
+    }
+
+    function updateProgressHeader(checkedSet) {
+      const total = CHECKLIST_DATA.items.length;
+      const done = checkedSet.size;
+      const pct = Math.round((done / total) * 100);
+      document.getElementById('active-date-label').textContent = formatReadableDate(activeDate);
+      document.getElementById('completion-summary').textContent = `${done} / ${total} Done (${pct}%)`;
+      document.getElementById('completion-bar').style.width = `${pct}%`;
+      document.getElementById('date-picker').value = activeDate;
+    }
+
+    function updateCategoryBadges(checkedSet) {
+      CHECKLIST_DATA.categories.forEach((cat) => {
+        const catItems = CHECKLIST_DATA.items.filter((it) => it.category === cat);
+        const catDone = catItems.filter((it) => checkedSet.has(it.id)).length;
+        const badge = document.querySelector(`[data-cat-badge="${CSS.escape(cat)}"]`);
+        if (badge) badge.textContent = `${catDone} / ${catItems.length}`;
+      });
+    }
+
+    function renderChecklist() {
+      const checkedSet = getCheckedSetForDate(activeDate);
+      updateProgressHeader(checkedSet);
+
+      const container = document.getElementById('categories-container');
+      container.innerHTML = '';
+
+      CHECKLIST_DATA.categories.forEach((category) => {
+        const items = CHECKLIST_DATA.items.filter((it) => it.category === category);
+        const doneCount = items.filter((it) => checkedSet.has(it.id)).length;
+
+        const details = document.createElement('details');
+        details.className = 'bg-white border border-slate-200 rounded-2xl shadow-sm overflow-hidden';
+        details.open = true;
+
+        const summary = document.createElement('summary');
+        summary.className = 'px-5 sm:px-6 py-4 cursor-pointer flex items-center justify-between gap-4 hover:bg-slate-50/70 transition select-none';
+        summary.innerHTML = `
+          <div class="flex items-center gap-3">
+            <span class="font-bold text-slate-900 text-base sm:text-lg">${category}</span>
+            <span data-cat-badge="${category}" class="px-2.5 py-0.5 rounded-full text-xs font-semibold bg-indigo-50 text-indigo-700 border border-indigo-200">
+              ${doneCount} / ${items.length}
+            </span>
+          </div>
+          <svg class="accordion-chevron w-5 h-5 text-slate-400 transition-transform duration-200" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+          </svg>
+        `;
+
+        const listDiv = document.createElement('div');
+        listDiv.className = 'divide-y divide-slate-100 border-t border-slate-100';
+
+        items.forEach((item) => {
+          const isChecked = checkedSet.has(item.id);
+          const row = document.createElement('label');
+          row.className = 'flex items-start gap-3.5 px-5 sm:px-6 py-4 hover:bg-slate-50/80 cursor-pointer transition';
+
+          const checkbox = document.createElement('input');
+          checkbox.type = 'checkbox';
+          checkbox.checked = isChecked;
+          checkbox.className = 'mt-1 h-4 w-4 rounded border-slate-300 text-indigo-600 focus:ring-indigo-500 cursor-pointer';
+          checkbox.addEventListener('change', () => toggleItem(item.id));
+
+          const textWrap = document.createElement('div');
+          textWrap.className = 'flex-1 min-w-0';
+          const labelSpan = document.createElement('div');
+          labelSpan.className = 'text-sm sm:text-base font-medium text-slate-900';
+          labelSpan.textContent = item.label;
+          textWrap.appendChild(labelSpan);
+
+          if (Array.isArray(item.sublines)) {
+            item.sublines.forEach((sub) => {
+              const subP = document.createElement('p');
+              subP.className = 'mt-0.5 text-xs sm:text-sm text-slate-500 leading-relaxed';
+              subP.textContent = sub;
+              textWrap.appendChild(subP);
+            });
+          }
+
+          row.appendChild(checkbox);
+          row.appendChild(textWrap);
+          listDiv.appendChild(row);
+        });
+
+        details.appendChild(summary);
+        details.appendChild(listDiv);
+        container.appendChild(details);
+      });
+    }
+
+    function setAllAccordions(openState) {
+      document.querySelectorAll('#categories-container details').forEach((el) => {
+        el.open = openState;
+      });
+    }
+
+    function stepDate(delta) {
+      activeDate = shiftDateString(activeDate, delta);
+      renderChecklist();
+    }
+
+    function handleDateInput(val) {
+      if (/^\d{4}-\d{2}-\d{2}$/.test(val)) {
+        activeDate = val;
+        renderChecklist();
+      }
+    }
+
+    function jumpToToday() {
+      lastKnownToday = getLocalDateString();
+      activeDate = lastKnownToday;
+      renderChecklist();
+    }
+
+    function switchView(viewName) {
+      const isTrends = viewName === 'trends';
+      document.getElementById('view-checklist').classList.toggle('hidden', isTrends);
+      document.getElementById('view-trends').classList.toggle('hidden', !isTrends);
+
+      const tabChecklist = document.getElementById('tab-checklist');
+      const tabTrends = document.getElementById('tab-trends');
+
+      if (isTrends) {
+        tabTrends.className = 'px-4 py-2 rounded-lg text-sm font-semibold bg-white text-indigo-700 shadow-sm transition';
+        tabChecklist.className = 'px-4 py-2 rounded-lg text-sm font-semibold text-slate-600 hover:text-slate-900 transition';
+        history.replaceState(null, '', '#trends');
+        renderTrends();
+      } else {
+        tabChecklist.className = 'px-4 py-2 rounded-lg text-sm font-semibold bg-white text-indigo-700 shadow-sm transition';
+        tabTrends.className = 'px-4 py-2 rounded-lg text-sm font-semibold text-slate-600 hover:text-slate-900 transition';
+        if (window.location.hash === '#trends') {
+          history.replaceState(null, '', window.location.pathname + window.location.search);
+        }
+      }
+    }
+
+    function renderTrends() {
+      const allData = loadAllData();
+      const validItemIds = new Set(CHECKLIST_DATA.items.map((i) => i.id));
+      const totalItems = CHECKLIST_DATA.items.length;
+
+      let loggedDaysCount = 0;
+      let totalChecksAllTime = 0;
+
+      Object.keys(allData).forEach((dateKey) => {
+        const arr = Array.isArray(allData[dateKey]) ? allData[dateKey].filter((id) => validItemIds.has(id)) : [];
+        if (arr.length > 0) {
+          loggedDaysCount += 1;
+          totalChecksAllTime += arr.length;
+        }
+      });
+
+      const emptyEl = document.getElementById('trends-empty-state');
+      const contentEl = document.getElementById('trends-content');
+
+      if (totalChecksAllTime === 0) {
+        emptyEl.classList.remove('hidden');
+        contentEl.classList.add('hidden');
+        return;
+      }
+
+      emptyEl.classList.add('hidden');
+      contentEl.classList.remove('hidden');
+
+      const todayStr = getLocalDateString();
+      const last14Keys = [];
+      const last14Labels = [];
+      const last14Pcts = [];
+
+      for (let i = 13; i >= 0; i--) {
+        const key = shiftDateString(todayStr, -i);
+        last14Keys.push(key);
+        const [y, m, d] = key.split('-').map(Number);
+        last14Labels.push(new Date(y, m - 1, d).toLocaleDateString(undefined, { month: 'short', day: 'numeric' }));
+        const checkedArr = Array.isArray(allData[key]) ? allData[key].filter((id) => validItemIds.has(id)) : [];
+        last14Pcts.push(Math.round((checkedArr.length / totalItems) * 100));
+      }
+
+      const rolling3 = last14Pcts.map((_, idx) => {
+        const start = Math.max(0, idx - 2);
+        const slice = last14Pcts.slice(start, idx + 1);
+        return Math.round(slice.reduce((a, b) => a + b, 0) / slice.length);
+      });
+
+      const avg14 = Math.round(last14Pcts.reduce((a, b) => a + b, 0) / last14Pcts.length);
+      document.getElementById('stat-logged-days').textContent = String(loggedDaysCount);
+      document.getElementById('stat-14d-avg').textContent = `${avg14}%`;
+      document.getElementById('stat-total-checks').textContent = String(totalChecksAllTime);
+
+      const categoryPcts = CHECKLIST_DATA.categories.map((cat) => {
+        const catItems = CHECKLIST_DATA.items.filter((i) => i.category === cat);
+        const maxPossible = catItems.length * last14Keys.length;
+        let doneInWindow = 0;
+        last14Keys.forEach((key) => {
+          const set = new Set(Array.isArray(allData[key]) ? allData[key] : []);
+          catItems.forEach((it) => {
+            if (set.has(it.id)) doneInWindow += 1;
+          });
+        });
+        return maxPossible > 0 ? Math.round((doneInWindow / maxPossible) * 100) : 0;
+      });
+
+      const itemCounts = CHECKLIST_DATA.items.map((item) => {
+        let count = 0;
+        last14Keys.forEach((key) => {
+          const set = new Set(Array.isArray(allData[key]) ? allData[key] : []);
+          if (set.has(item.id)) count += 1;
+        });
+        return { item, count, missed: last14Keys.length - count };
+      });
+
+      const consistentSorted = [...itemCounts].sort((a, b) => b.count - a.count).slice(0, 3);
+      const skippedSorted = [...itemCounts].sort((a, b) => b.missed - a.missed).slice(0, 3);
+
+      document.getElementById('most-consistent-list').innerHTML = consistentSorted
+        .map((x) => `<li class="flex items-center justify-between gap-2"><span class="text-slate-700 truncate">${x.item.label}</span><span class="font-semibold text-emerald-700 shrink-0">${x.count} / 14d</span></li>`)
+        .join('');
+
+      document.getElementById('most-skipped-list').innerHTML = skippedSorted
+        .map((x) => `<li class="flex items-center justify-between gap-2"><span class="text-slate-700 truncate">${x.item.label}</span><span class="font-semibold text-amber-700 shrink-0">${x.missed} / 14d</span></li>`)
+        .join('');
+
+      const trendCtx = document.getElementById('completionTrendChart').getContext('2d');
+      if (trendChartInstance) trendChartInstance.destroy();
+      trendChartInstance = new Chart(trendCtx, {
+        type: 'bar',
+        data: {
+          labels: last14Labels,
+          datasets: [
+            {
+              type: 'bar',
+              label: 'Daily %',
+              data: last14Pcts,
+              backgroundColor: 'rgba(79, 70, 229, 0.75)',
+              borderRadius: 6
+            },
+            {
+              type: 'line',
+              label: '3-Day Avg %',
+              data: rolling3,
+              borderColor: '#0f172a',
+              backgroundColor: '#0f172a',
+              borderWidth: 2,
+              tension: 0.3,
+              pointRadius: 2
+            }
+          ]
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          scales: {
+            y: { min: 0, max: 100, ticks: { callback: (v) => `${v}%` } }
+          }
+        }
+      });
+
+      const catCtx = document.getElementById('categoryBalanceChart').getContext('2d');
+      if (categoryChartInstance) categoryChartInstance.destroy();
+      categoryChartInstance = new Chart(catCtx, {
+        type: 'bar',
+        data: {
+          labels: CHECKLIST_DATA.categories,
+          datasets: [
+            {
+              label: '14-Day Completion %',
+              data: categoryPcts,
+              backgroundColor: ['#4f46e5', '#0d9488', '#d97706'],
+              borderRadius: 6
+            }
+          ]
+        },
+        options: {
+          indexAxis: 'y',
+          responsive: true,
+          maintainAspectRatio: false,
+          scales: {
+            x: { min: 0, max: 100, ticks: { callback: (v) => `${v}%` } }
+          }
+        }
+      });
+    }
+
+    function exportChecklistJson() {
+      const payload = {
+        storageKey: STORAGE_KEY,
+        exportedAt: new Date().toISOString(),
+        data: loadAllData()
+      };
+      const blob = new Blob([JSON.stringify(payload, null, 2)], { type: 'application/json' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = `innerscale-checklist-${getLocalDateString()}.json`;
+      a.click();
+      URL.revokeObjectURL(url);
+    }
+
+    function importChecklistJson(event) {
+      const file = event.target.files?.[0];
+      if (!file) return;
+      const reader = new FileReader();
+      reader.onload = () => {
+        try {
+          const parsed = JSON.parse(String(reader.result || '{}'));
+          const incoming = parsed && typeof parsed.data === 'object' && parsed.data !== null ? parsed.data : parsed;
+          if (!incoming || typeof incoming !== 'object') return;
+          const existing = loadAllData();
+          Object.keys(incoming).forEach((dateKey) => {
+            if (/^\d{4}-\d{2}-\d{2}$/.test(dateKey) && Array.isArray(incoming[dateKey])) {
+              existing[dateKey] = Array.from(new Set(incoming[dateKey].map(String)));
+            }
+          });
+          localStorage.setItem(STORAGE_KEY, JSON.stringify(existing));
+          renderChecklist();
+          if (!document.getElementById('view-trends')?.classList.contains('hidden')) {
+            renderTrends();
+          }
+        } catch {
+          alert('Could not read that JSON file.');
+        }
+      };
+      reader.readAsText(file);
+      event.target.value = '';
+    }
+
+    document.addEventListener('visibilitychange', () => {
+      if (document.visibilityState !== 'visible') return;
+      const currentToday = getLocalDateString();
+      if (currentToday !== lastKnownToday) {
+        const wasOnPreviousToday = (activeDate === lastKnownToday);
+        lastKnownToday = currentToday;
+        if (wasOnPreviousToday) {
+          activeDate = currentToday;
+          renderChecklist();
+        }
+      }
+      if (!document.getElementById('view-trends')?.classList.contains('hidden')) {
+        renderTrends();
+      }
+    });
+
+    renderChecklist();
+    if (window.location.hash === '#trends') {
+      switchView('trends');
+    }
+  </script>
+</body>
+</html>
